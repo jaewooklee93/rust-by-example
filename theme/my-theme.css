@@ -6,19 +6,16 @@
 
 .ayu {
     --bg:#111;
-/*     --bg : rgb(14, 17, 23); */
     --fg : #eee;
     --scrollbar: #333;
 }
 
 * {
     font-family: "Pretendard Variable";
+    --mono-font: "Source Code Pro", "Pretendard Variable", monospace !important;
 }
 
 code * {
     font-family: "Source Code Pro";
 }
 
-* {
-    --mono-font: "Source Code Pro", "Pretendard Variable", monospace;
-}

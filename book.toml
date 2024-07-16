@@ -13,6 +13,7 @@ enable = true
 
 [output.html]
 git-repository-url = "https://github.com/rust-lang/rust-by-example"
+preferred-dark-theme = "ayu"
 additional-css = [
   "theme/css/language-picker.css",
   "theme/my-theme.css",
