@@ -1,6 +1,6 @@
-# Filesystem Operations
+## 파일 시스템 작업
 
-The `std::fs` module contains several functions that deal with the filesystem.
+`std::fs` 모듈에는 파일 시스템과 관련된 여러 함수가 포함되어 있습니다.
 
 ```rust,ignore
 use std::fs;
@@ -13,7 +13,7 @@ use std::os::unix;
 use std::os::windows;
 use std::path::Path;
 
-// A simple implementation of `% cat path`
+// `% cat path`의 간단한 구현
 fn cat(path: &Path) -> io::Result<String> {
     let mut f = File::open(path)?;
     let mut s = String::new();
@@ -23,14 +23,14 @@ fn cat(path: &Path) -> io::Result<String> {
     }
 }
 
-// A simple implementation of `% echo s > path`
+// `% echo s > path`의 간단한 구현
 fn echo(s: &str, path: &Path) -> io::Result<()> {
     let mut f = File::create(path)?;
 
     f.write_all(s.as_bytes())
 }
 
-// A simple implementation of `% touch path` (ignores existing files)
+// `% touch path`의 간단한 구현 (기존 파일 무시)
 fn touch(path: &Path) -> io::Result<()> {
     match OpenOptions::new().create(true).write(true).open(path) {
         Ok(_) => Ok(()),
@@ -40,20 +40,20 @@ fn touch(path: &Path) -> io::Result<()> {
 
 fn main() {
     println!("`mkdir a`");
-    // Create a directory, returns `io::Result<()>`
+    // 디렉토리 생성, `io::Result<()>` 반환
     match fs::create_dir("a") {
         Err(why) => println!("! {:?}", why.kind()),
         Ok(_) => {},
     }
 
     println!("`echo hello > a/b.txt`");
-    // The previous match can be simplified using the `unwrap_or_else` method
+    // 이전 match는 `unwrap_or_else` 메서드를 사용하여 간소화할 수 있습니다.
     echo("hello", &Path::new("a/b.txt")).unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
 
     println!("`mkdir -p a/c/d`");
-    // Recursively create a directory, returns `io::Result<()>`
+    // 재귀적으로 디렉토리 생성, `io::Result<()>` 반환
     fs::create_dir_all("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
@@ -64,7 +64,7 @@ fn main() {
     });
 
     println!("`ln -s ../b.txt a/c/b.txt`");
-    // Create a symbolic link, returns `io::Result<()>`
+    // 심볼릭 링크 생성, `io::Result<()>` 반환
     #[cfg(target_family = "unix")] {
         unix::fs::symlink("../b.txt", "a/c/b.txt").unwrap_or_else(|why| {
             println!("! {:?}", why.kind());
@@ -83,7 +83,7 @@ fn main() {
     }
 
     println!("`ls a`");
-    // Read the contents of a directory, returns `io::Result<Vec<Path>>`
+    // 디렉토리 내용 읽기, `io::Result<Vec<Path>>` 반환
     match fs::read_dir("a") {
         Err(why) => println!("! {:?}", why.kind()),
         Ok(paths) => for path in paths {
@@ -92,13 +92,15 @@ fn main() {
     }
 
     println!("`rm a/c/e.txt`");
-    // Remove a file, returns `io::Result<()>`
+    // 파일 삭제, `io::Result<()>` 반환
     fs::remove_file("a/c/e.txt").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
 
     println!("`rmdir a/c/d`");
-    // Remove an empty directory, returns `io::Result<()>`
+    // 비어있는 디렉토리 삭제, `io::Result<()>` 반환
+```rust
+fn main() {
     fs::remove_dir("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
@@ -106,7 +108,7 @@ fn main() {
 
 ```
 
-Here's the expected successful output:
+예상되는 성공적인 출력은 다음과 같습니다.
 
 ```shell
 $ rustc fs.rs && ./fs
@@ -124,7 +126,7 @@ $ rustc fs.rs && ./fs
 `rmdir a/c/d`
 ```
 
-And the final state of the `a` directory is:
+그리고 `a` 디렉토리의 최종 상태는 다음과 같습니다.
 
 ```shell
 $ tree a
@@ -136,7 +138,7 @@ a
 1 directory, 2 files
 ```
 
-An alternative way to define the function `cat` is with `?` notation:
+`cat` 함수를 정의하는 또 다른 방법은 `?` 표현법을 사용하는 것입니다.
 
 ```rust,ignore
 fn cat(path: &Path) -> io::Result<String> {
@@ -147,7 +149,7 @@ fn cat(path: &Path) -> io::Result<String> {
 }
 ```
 
-### See also:
+### 참조:
 
 [`cfg!`][cfg]
 

@@ -1,59 +1,52 @@
-# Functions
+## 함수
 
-The same set of rules can be applied to functions: a type `T` becomes
-generic when preceded by `<T>`.
+함수에도 동일한 규칙이 적용됩니다. 유형 `T`가 `<T>`로 앞서면 일반화됩니다.
 
-Using generic functions sometimes requires explicitly specifying type 
-parameters. This may be the case if the function is called where the return type 
-is generic, or if the compiler doesn't have enough information to infer 
-the necessary type parameters.
+일반화된 함수를 사용하는 경우 때때로 유형 매개변수를 명시적으로 지정해야 할 수 있습니다. 이는 함수가 호출될 때 반환 유형이 일반화된 경우 또는 컴파일러가 필요한 유형 매개변수를 추론할 충분한 정보를 가지고 있지 않은 경우에 발생할 수 있습니다.
 
-A function call with explicitly specified type parameters looks like:
+명시적으로 유형 매개변수가 지정된 함수 호출은 다음과 같습니다.
 `fun::<A, B, ...>()`.
 
 ```rust,editable
-struct A;          // Concrete type `A`.
-struct S(A);       // Concrete type `S`.
-struct SGen<T>(T); // Generic type `SGen`.
+struct A;          // 구체적인 유형 `A`.
+struct S(A);       // 구체적인 유형 `S`.
+struct SGen<T>(T); // 일반적인 유형 `SGen`.
 
-// The following functions all take ownership of the variable passed into
-// them and immediately go out of scope, freeing the variable.
+// 다음 함수는 모두 전달된 변수의 소유권을 가져와 즉시 범위를 벗어나므로 변수가 해제됩니다.
 
-// Define a function `reg_fn` that takes an argument `_s` of type `S`.
-// This has no `<T>` so this is not a generic function.
+// `_s` 유형이 `S`인 `reg_fn` 함수를 정의합니다.
+// 이것은 `<T>`가 없으므로 일반화된 함수가 아닙니다.
 fn reg_fn(_s: S) {}
 
-// Define a function `gen_spec_t` that takes an argument `_s` of type `SGen<T>`.
-// It has been explicitly given the type parameter `A`, but because `A` has not 
-// been specified as a generic type parameter for `gen_spec_t`, it is not generic.
+// `_s` 유형이 `SGen<A>`인 `gen_spec_t` 함수를 정의합니다.
+// `A` 유형 매개변수가 명시적으로 지정되었지만, `gen_spec_t`에 대해 `A`가 일반화된 유형 매개변수로 지정되지 않았기 때문에 일반화된 함수가 아닙니다.
 fn gen_spec_t(_s: SGen<A>) {}
 
-// Define a function `gen_spec_i32` that takes an argument `_s` of type `SGen<i32>`.
-// It has been explicitly given the type parameter `i32`, which is a specific type.
-// Because `i32` is not a generic type, this function is also not generic.
+// `_s` 유형이 `SGen<i32>`인 `gen_spec_i32` 함수를 정의합니다.
+// `i32`가 일반화된 유형이 아니기 때문에 이 함수도 일반화되지 않았습니다.
 fn gen_spec_i32(_s: SGen<i32>) {}
 
-// Define a function `generic` that takes an argument `_s` of type `SGen<T>`.
-// Because `SGen<T>` is preceded by `<T>`, this function is generic over `T`.
+// `_s` 유형이 `SGen<T>`인 `generic` 함수를 정의합니다.
+// `SGen<T>`가 `<T>`로 앞서 있기 때문에 `T`에 대한 일반화된 함수입니다.
 fn generic<T>(_s: SGen<T>) {}
 
 fn main() {
-    // Using the non-generic functions
-    reg_fn(S(A));          // Concrete type.
-    gen_spec_t(SGen(A));   // Implicitly specified type parameter `A`.
-    gen_spec_i32(SGen(6)); // Implicitly specified type parameter `i32`.
+    // 일반화되지 않은 함수를 사용하는 경우
+    reg_fn(S(A));          // 구체적인 유형.
+    gen_spec_t(SGen(A));   // 암시적으로 지정된 유형 매개변수 `A`.
+    gen_spec_i32(SGen(6)); // 암시적으로 지정된 유형 매개변수 `i32`.
 
-    // Explicitly specified type parameter `char` to `generic()`.
+    // `generic()`에 명시적으로 지정된 유형 매개변수 `char`.
     generic::<char>(SGen('a'));
 
-    // Implicitly specified type parameter `char` to `generic()`.
+    // `generic()`에 암시적으로 지정된 유형 매개변수 `char`.
     generic(SGen('c'));
 }
 ```
 
-### See also:
+### 참조:
 
-[functions][fn] and [`struct`s][structs]
+[함수][fn] 및 [`struct`s][structs]
 
 [fn]: ../fn.md
 [structs]: ../custom_types/structs.md

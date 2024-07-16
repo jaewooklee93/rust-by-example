@@ -1,37 +1,33 @@
-# Formatting
+## 형식
 
-We've seen that formatting is specified via a *format string*:
+우리는 형식이 *형식 문자열*을 통해 지정된다는 것을 알았습니다:
 
 * `format!("{}", foo)` -> `"3735928559"`
 * `format!("0x{:X}", foo)` -> [`"0xDEADBEEF"`][deadbeef]
 * `format!("0o{:o}", foo)` -> `"0o33653337357"`
 
-The same variable (`foo`) can be formatted differently depending on which
-*argument type* is used: `X` vs `o` vs *unspecified*.
+같은 변수 (`foo`)는 사용된 *인수 유형*에 따라 다르게 형식화될 수 있습니다: `X` vs `o` vs *미지정*.
 
-This formatting functionality is implemented via traits, and there is one trait
-for each argument type. The most common formatting trait is `Display`, which
-handles cases where the argument type is left unspecified: `{}` for instance.
+이 형식화 기능은 trait를 통해 구현되며, 각 인수 유형에는 하나의 trait가 있습니다. 가장 일반적인 형식화 trait는 `Display`로, 인수 유형이 미지정인 경우 (예: `{}`)를 처리합니다.
 
 ```rust,editable
 use std::fmt::{self, Formatter, Display};
 
 struct City {
     name: &'static str,
-    // Latitude
+    // 위도
     lat: f32,
-    // Longitude
+    // 경도
     lon: f32,
 }
 
 impl Display for City {
-    // `f` is a buffer, and this method must write the formatted string into it.
+    // `f`는 버퍼이며, 이 메서드는 형식화된 문자열을 버퍼에 씁니다.
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let lat_c = if self.lat >= 0.0 { 'N' } else { 'S' };
         let lon_c = if self.lon >= 0.0 { 'E' } else { 'W' };
 
-        // `write!` is like `format!`, but it will write the formatted string
-        // into a buffer (the first argument).
+        // `write!`는 `format!`와 유사하지만, 형식화된 문자열을 버퍼(첫 번째 인수)에 씁니다.
         write!(f, "{}: {:.3}°{} {:.3}°{}",
                self.name, self.lat.abs(), lat_c, self.lon.abs(), lon_c)
     }
@@ -57,20 +53,17 @@ fn main() {
         Color { red: 0, green: 3, blue: 254 },
         Color { red: 0, green: 0, blue: 0 },
     ] {
-        // Switch this to use {} once you've added an implementation
-        // for fmt::Display.
+        // 이를 `{}`로 변경하려면 `fmt::Display` trait에 대한 구현을 추가해야 합니다.
         println!("{:?}", color);
     }
 }
 ```
 
-You can view a [full list of formatting traits][fmt_traits] and their argument
-types in the [`std::fmt`][fmt] documentation.
+`std::fmt` 문서에서 [형식화 trait 목록][fmt_traits]과 그 인수 유형을 볼 수 있습니다.
 
-### Activity
+### 활동
 
-Add an implementation of the `fmt::Display` trait for the `Color` struct above
-so that the output displays as:
+위의 `Color` 구조체에 대한 `fmt::Display` trait의 구현을 추가하여 출력이 다음과 같이 표시되도록 하세요:
 
 ```text
 RGB (128, 255, 90) 0x80FF5A
@@ -78,15 +71,15 @@ RGB (0, 3, 254) 0x0003FE
 RGB (0, 0, 0) 0x000000
 ```
 
-Three hints if you get stuck:
+막막해질 경우 세 가지 힌트입니다:
 
-* The formula for calculating a color in the RGB color space is:
-`RGB = (R*65536)+(G*256)+B , (when R is RED, G is GREEN and B is BLUE)`.
-For more see [RGB color format & calculation][rgb_color].
-* You [may need to list each color more than once][named_parameters].
-* You can [pad with zeros to a width of 2][fmt_width] with `:0>2`.
+* RGB 색상 공간에서 색상을 계산하는 공식은 다음과 같습니다:
+`RGB = (R*65536)+(G*256)+B , (R이 RED, G가 GREEN, B가 BLUE일 때)`.
+더 자세한 내용은 [RGB 색상 형식 및 계산][rgb_color]을 참조하세요.
+* [버퍼에 문자열을 여러 번 추가해야 할 수 있습니다][named_parameters].
+* `:0>2`를 사용하여 [두 자리까지 0으로 채우기][fmt_width]할 수 있습니다.
 
-### See also:
+### 참조
 
 [`std::fmt`][fmt]
 
@@ -94,5 +87,5 @@ For more see [RGB color format & calculation][rgb_color].
 [named_parameters]: https://doc.rust-lang.org/std/fmt/#named-parameters
 [deadbeef]: https://en.wikipedia.org/wiki/Deadbeef#Magic_debug_values
 [fmt]: https://doc.rust-lang.org/std/fmt/
-[fmt_traits]: https://doc.rust-lang.org/std/fmt/#formatting-traits
-[fmt_width]: https://doc.rust-lang.org/std/fmt/#width
+fmt_traits: https://doc.rust-lang.org/std/fmt/#formatting-traits
+fmt_width: https://doc.rust-lang.org/std/fmt/#width

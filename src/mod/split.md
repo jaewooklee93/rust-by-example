@@ -1,7 +1,6 @@
-# File hierarchy
+## 파일 계층 구조
 
-Modules can be mapped to a file/directory hierarchy. Let's break down the
-[visibility example][visibility] in files:
+모듈은 파일/디렉토리 계층 구조에 매핑될 수 있습니다. [시각화 예제][시각화]를 파일에서 살펴보겠습니다.
 
 ```shell
 $ tree .
@@ -13,11 +12,11 @@ $ tree .
 └── split.rs
 ```
 
-In `split.rs`:
+`split.rs` 안에서:
 
 ```rust,ignore
-// This declaration will look for a file named `my.rs` and will
-// insert its contents inside a module named `my` under this scope
+// 이 선언은 `my.rs`라는 파일을 찾고 `my`라는 이름의 모듈 아래에서
+// 그 내용을 삽입합니다.
 mod my;
 
 fn function() {
@@ -36,12 +35,11 @@ fn main() {
 
 ```
 
-In `my.rs`:
+`my.rs` 안에서:
 
 ```rust,ignore
-// Similarly `mod inaccessible` and `mod nested` will locate the `nested.rs`
-// and `inaccessible.rs` files and insert them here under their respective
-// modules
+// 마찬가지로 `mod inaccessible`과 `mod nested`는 각각 `nested.rs`와
+// `inaccessible.rs` 파일을 찾고 해당 모듈 아래에 삽입합니다.
 mod inaccessible;
 pub mod nested;
 
@@ -60,7 +58,7 @@ pub fn indirect_access() {
 }
 ```
 
-In `my/nested.rs`:
+`my/nested.rs` 안에서:
 
 ```rust,ignore
 pub fn function() {
@@ -73,7 +71,7 @@ fn private_function() {
 }
 ```
 
-In `my/inaccessible.rs`:
+`my/inaccessible.rs` 안에서:
 
 ```rust,ignore
 #[allow(dead_code)]
@@ -82,7 +80,7 @@ pub fn public_function() {
 }
 ```
 
-Let's check that things still work as before:
+이전과 같이 모든 것이 제대로 작동하는지 확인해 보겠습니다.
 
 ```shell
 $ rustc split.rs && ./split
@@ -93,4 +91,4 @@ called `my::indirect_access()`, that
 called `my::nested::function()`
 ```
 
-[visibility]: visibility.md
+[시각화]: visibility.md

@@ -1,19 +1,16 @@
-# Diverging functions
+##  절대 반환하지 않는 함수
 
-Diverging functions never return. They are marked using `!`, which is an empty type.
+절대 반환하지 않는 함수는 `!`로 표시됩니다. `!`는 비어있는 유형입니다.
 
 ```rust
 fn foo() -> ! {
-    panic!("This call never returns.");
+    panic!("이 함수는 절대 반환하지 않습니다.");
 }
 ```
 
-As opposed to all the other types, this one cannot be instantiated, because the
-set of all possible values this type can have is empty. Note that, it is
-different from the `()` type, which has exactly one possible value.
+다른 모든 유형과 달리, 이 유형은 인스턴스화할 수 없습니다. 왜냐하면 이 유형이 가질 수 있는 모든 가능한 값의 집합이 비어 있기 때문입니다. `()` 유형과 다르다는 점을 유의하세요. `()` 유형은 정확히 하나의 가능한 값을 가지고 있습니다.
 
-For example, this function returns as usual, although there is no information
-in the return value.
+예를 들어, 이 함수는 일반적으로 반환하지만, 반환 값에 정보가 없습니다.
 
 ```rust
 fn some_fn() {
@@ -22,48 +19,41 @@ fn some_fn() {
 
 fn main() {
     let _a: () = some_fn();
-    println!("This function returns and you can see this line.");
+    println!("이 함수는 반환하고 이 줄을 볼 수 있습니다.");
 }
 ```
 
-As opposed to this function, which will never return the control back to the caller.
+반면에, 이 함수는 호출자에게 제어를 다시 돌려주지 않습니다.
 
 ```rust,ignore
 #![feature(never_type)]
 
 fn main() {
-    let x: ! = panic!("This call never returns.");
-    println!("You will never see this line!");
+    let x: ! = panic!("이 함수는 절대 반환하지 않습니다.");
+    println!("이 줄은 절대 볼 수 없습니다!");
 }
 ```
 
-Although this might seem like an abstract concept, it is actually very useful and
-often handy. The main advantage of this type is that it can be cast to any other 
-type, making it versatile in situations where an exact type is required, such as 
-in match branches. This flexibility allows us to write code like this:
+비록 이것은 추상적인 개념처럼 보일 수 있지만, 실제로 매우 유용하고 자주 사용됩니다. 이 유형의 주요 장점은 어떤 유형으로든 캐스트될 수 있다는 것입니다. 이는 `match` 조건에서와 같이 정확한 유형이 필요한 상황에서 유용합니다. 이 유연성은 다음과 같은 코드를 작성할 수 있도록 합니다.
 
 ```rust
 fn main() {
     fn sum_odd_numbers(up_to: u32) -> u32 {
         let mut acc = 0;
         for i in 0..up_to {
-            // Notice that the return type of this match expression must be u32
-            // because of the type of the "addition" variable.
+            // `match` 표현식의 반환 유형은 "addition" 변수의 유형 때문에 u32여야 합니다.
             let addition: u32 = match i%2 == 1 {
-                // The "i" variable is of type u32, which is perfectly fine.
+                // "i" 변수는 u32 유형으로, 완벽합니다.
                 true => i,
-                // On the other hand, the "continue" expression does not return
-                // u32, but it is still fine, because it never returns and therefore
-                // does not violate the type requirements of the match expression.
+                // 반면에 "continue" 표현식은 u32를 반환하지 않지만, `match` 표현식의 유형 요구 사항을 위반하지 않습니다.
                 false => continue,
             };
             acc += addition;
         }
         acc
     }
-    println!("Sum of odd numbers up to 9 (excluding): {}", sum_odd_numbers(9));
+    println!("9 (제외)까지의 홀수의 합: {}", sum_odd_numbers(9));
 }
 ```
 
-It is also the return type of functions that loop forever (e.g. `loop {}`) like
-network servers or functions that terminate the process (e.g. `exit()`).
+또한 영구적으로 루프를 돌리는 함수 (예: `loop {}`) 또는 프로세스를 종료하는 함수 (예: `exit()`)의 반환 유형입니다.

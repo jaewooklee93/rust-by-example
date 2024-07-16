@@ -1,106 +1,84 @@
-# Formatted print
+## 형식화된 출력
 
-Printing is handled by a series of [`macros`][macros] defined in
-[`std::fmt`][fmt] some of which are:
+출력은 `std::fmt` 라이브러리에 정의된 일련의 [메타프로세서](macros)를 통해 처리되며, 그 중 일부는 다음과 같습니다.
 
-* `format!`: write formatted text to [`String`][string]
-* `print!`: same as `format!` but the text is printed to the console
-  (io::stdout).
-* `println!`: same as `print!` but a newline is appended.
-* `eprint!`: same as `print!` but the text is printed to the standard error
-  (io::stderr).
-* `eprintln!`: same as `eprint!` but a newline is appended.
+* `format!`: `String`에 형식화된 텍스트를 작성합니다.
+* `print!`: `format!`와 동일하지만 텍스트가 콘솔(io::stdout)에 출력됩니다.
+* `println!`: `print!`와 동일하지만 줄바꿈이 추가됩니다.
+* `eprint!`: `print!`와 동일하지만 텍스트가 표준 오류(io::stderr)에 출력됩니다.
+* `eprintln!`: `eprint!`와 동일하지만 줄바꿈이 추가됩니다.
 
-All parse text in the same fashion. As a plus, Rust checks formatting
-correctness at compile time.
+모든 문자열은 동일한 방식으로 분석됩니다. 또한 Rust는 컴파일 시간에 형식 정확성을 검사합니다.
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
-    // In general, the `{}` will be automatically replaced with any
-    // arguments. These will be stringified.
-    println!("{} days", 31);
+    // 일반적으로 `{}`는 자동으로 모든 인수로 대체됩니다. 이러한 인수는 문자열로 변환됩니다.
+    println!("{}일", 31);
 
-    // Positional arguments can be used. Specifying an integer inside `{}`
-    // determines which additional argument will be replaced. Arguments start
-    // at 0 immediately after the format string.
-    println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
+    // 위치 기반 인수를 사용할 수 있습니다. `{}` 안에 정수를 지정하면 추가 인수 중 어떤 것이 대체될지 결정됩니다. 인수는 형식 문자열 바로 뒤에 있는 0부터 시작합니다.
+    println!("{0}, 이것은 {1}. {1}, 이것은 {0}", "Alice", "Bob");
 
-    // As can named arguments.
+    // 이름 지정된 인수를 사용할 수도 있습니다.
     println!("{subject} {verb} {object}",
-             object="the lazy dog",
-             subject="the quick brown fox",
-             verb="jumps over");
+             object="게으른 개",
+             subject="빠른 갈색 여우",
+             verb="뛰어넘습니다");
 
-    // Different formatting can be invoked by specifying the format character
-    // after a `:`.
-    println!("Base 10:               {}",   69420); // 69420
-    println!("Base 2 (binary):       {:b}", 69420); // 10000111100101100
-    println!("Base 8 (octal):        {:o}", 69420); // 207454
-    println!("Base 16 (hexadecimal): {:x}", 69420); // 10f2c
+    // `:` 뒤에 지정하면 다른 형식을 사용할 수 있습니다.
+    println!("10진수:               {}",   69420); // 69420
+    println!("2진수:       {:b}", 69420); // 10000111100101100
+    println!("8진수:        {:o}", 69420); // 207454
+    println!("16진수: {:x}", 69420); // 10f2c
 
-    // You can right-justify text with a specified width. This will
-    // output "    1". (Four white spaces and a "1", for a total width of 5.)
+    // 텍스트를 지정된 너비로 오른쪽 정렬할 수 있습니다. 이것은 "    1"을 출력합니다. (4개의 흰색 공백과 "1"을 포함하여 총 5개의 너비).
     println!("{number:>5}", number=1);
 
-    // You can pad numbers with extra zeroes,
+    // 숫자를 0으로 채울 수 있습니다,
     println!("{number:0>5}", number=1); // 00001
-    // and left-adjust by flipping the sign. This will output "10000".
+    // 그리고 왼쪽 정렬하여 반대 방향으로 합니다. 이것은 "10000"을 출력합니다.
     println!("{number:0<5}", number=1); // 10000
 
-    // You can use named arguments in the format specifier by appending a `$`.
+    // `$`를 추가하여 형식 지정자에 이름 지정된 인수를 사용할 수 있습니다.
     println!("{number:0>width$}", number=1, width=5);
 
-    // Rust even checks to make sure the correct number of arguments are used.
+    // Rust는 사용된 인수의 수가 올바른지 확인합니다.
     println!("My name is {0}, {1} {0}", "Bond");
-    // FIXME ^ Add the missing argument: "James"
+    // FIXME ^ 추가된 인수: "James"
 
-    // Only types that implement fmt::Display can be formatted with `{}`. User-
-    // defined types do not implement fmt::Display by default.
+    // `{}`를 사용하여 출력할 수 있는 유일한 유형은 `fmt::Display`를 구현한 유형입니다. 사용자 정의 유형은 기본적으로 `fmt::Display`를 구현하지 않습니다.
 
-    #[allow(dead_code)] // disable `dead_code` which warn against unused module
+    #[allow(dead_code)] // `dead_code` 경고를 무시하여 사용되지 않는 모듈을 허용합니다.
     struct Structure(i32);
 
-    // This will not compile because `Structure` does not implement
-    // fmt::Display.
+    // `fmt::Display`를 구현하지 않았기 때문에 이것은 컴파일되지 않습니다.
     // println!("This struct `{}` won't print...", Structure(3));
-    // TODO ^ Try uncommenting this line
+    // TODO ^ 이 줄을 주석 해제해 보세요
 
-    // For Rust 1.58 and above, you can directly capture the argument from a
-    // surrounding variable. Just like the above, this will output
-    // "    1", 4 white spaces and a "1".
+    // Rust 1.58 이상에서는 주변 변수에서 인수를 직접 가져올 수 있습니다. 위와 같이 "    1"을 출력합니다. 4개의 흰색 공백과 "1"입니다.
     let number: f64 = 1.0;
     let width: usize = 5;
     println!("{number:>width$}");
 }
 ```
 
-[`std::fmt`][fmt] contains many [`traits`][traits] which govern the display
-of text. The base form of two important ones are listed below:
+[`std::fmt`][fmt]에는 텍스트 출력을 관리하는 많은 [traits](traits)가 포함되어 있습니다. 아래는 두 가지 중요한 기본 형태입니다.
 
-* `fmt::Debug`: Uses the `{:?}` marker. Format text for debugging purposes.
-* `fmt::Display`: Uses the `{}` marker. Format text in a more elegant, user
-  friendly fashion.
+* `fmt::Debug`: `{:?}` 마커를 사용합니다. 디버깅 목적으로 텍스트를 형식화합니다.
+* `fmt::Display`: `{}` 마커를 사용합니다. 디버깅 목적이 아닌 더 우아하고 사용자 친화적인 방식으로 텍스트를 형식화합니다.
 
-Here, we used `fmt::Display` because the std library provides implementations
-for these types. To print text for custom types, more steps are required.
+여기서는 `fmt::Display`를 사용했는데, 왜냐하면 std 라이브러리는 이러한 유형에 대한 구현을 제공하기 때문입니다. 사용자 정의 유형을 출력하려면 추가적인 단계가 필요합니다.
 
-Implementing the `fmt::Display` trait automatically implements the
-[`ToString`] trait which allows us to [convert] the type to [`String`][string].
+ `fmt::Display` trait를 구현하면 자동으로 [`ToString`] trait가 구현되어 [`String`][string]으로 타입을 [변환]할 수 있습니다.
 
-In *line 43*, `#[allow(dead_code)]` is an [attribute] which only applies to the module after it.
+*라인 43*에서 `#[allow(dead_code)]`는 모듈 이후에만 적용되는 [속성]입니다.
 
-### Activities
+### 활동
 
-* Fix the issue in the above code (see FIXME) so that it runs without
-  error.
-* Try uncommenting the line that attempts to format the `Structure` struct
-  (see TODO)
-* Add a `println!` macro call that prints: `Pi is roughly 3.142` by controlling
-  the number of decimal places shown. For the purposes of this exercise, use
-  `let pi = 3.141592` as an estimate for pi. (Hint: you may need to check the
-  [`std::fmt`][fmt] documentation for setting the number of decimals to display)
+* 위 코드의 문제를 해결하세요 (FIXME 참조)  오류 없이 실행되도록 하세요.
+* `Structure` 구조체를 형식화하려는 줄을 해제해보세요 (TODO 참조)
+* `println!` 매크로 호출을 추가하여 `Pi는 약 3.142`를 출력하세요. 소수점 자리수를 제어하세요. 이 연습의 목적을 위해 `let pi = 3.141592`를 파이에 대한 추정치로 사용하세요. (힌트: [`std::fmt`][fmt] 문서를 확인하여 표시할 소수점 자리수를 설정하는 방법을 확인하세요)
 
-### See also:
+### 참조
 
 [`std::fmt`][fmt], [`macros`][macros], [`struct`][structs], [`traits`][traits], and [`dead_code`][dead_code]
 

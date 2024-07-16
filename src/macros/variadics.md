@@ -1,22 +1,21 @@
-# Variadic Interfaces
+## 다양한 인터페이스
 
-A _variadic_ interface takes an arbitrary number of arguments. For example,
-`println!` can take an arbitrary number of arguments, as determined by the
-format string.
+_다양한_ 인터페이스는 임의의 수의 인수를 받습니다. 예를 들어,
+`println!`은 형식 문자열에 의해 결정되는 임의의 수의 인수를 받을 수 있습니다.
 
-We can extend our `calculate!` macro from the previous section to be variadic:
+이전 섹션의 `calculate!` 매크로를 다양한 인터페이스로 확장할 수 있습니다.
 
 ```rust,editable
 macro_rules! calculate {
-    // The pattern for a single `eval`
+    // 하나의 `eval`에 대한 패턴
     (eval $e:expr) => {
         {
-            let val: usize = $e; // Force types to be integers
+            let val: usize = $e; // 타입을 정수로 강제
             println!("{} = {}", stringify!{$e}, val);
         }
     };
 
-    // Decompose multiple `eval`s recursively
+    // 여러 `eval`을 재귀적으로 분해
     (eval $e:expr, $(eval $es:expr),+) => {{
         calculate! { eval $e }
         calculate! { $(eval $es),+ }
@@ -24,7 +23,7 @@ macro_rules! calculate {
 }
 
 fn main() {
-    calculate! { // Look ma! Variadic `calculate!`!
+    calculate! { // 다양한 `calculate!`을 보세요!
         eval 1 + 2,
         eval 3 + 4,
         eval (2 * 3) + 1
@@ -32,7 +31,7 @@ fn main() {
 }
 ```
 
-Output:
+출력:
 
 ```txt
 1 + 2 = 3

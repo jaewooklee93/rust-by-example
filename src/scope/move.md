@@ -1,59 +1,52 @@
-# Ownership and moves
+## 소유권 및 이동
 
-Because variables are in charge of freeing their own resources, 
-**resources can only have one owner**. This prevents resources 
-from being freed more than once. Note that not all variables own 
-resources (e.g. [references]).
+변수가 자신의 리소스를 해제하는 데 책임이 있기 때문에, 
+**리소스는 하나의 소유자만을 가질 수 있습니다**. 이는 리소스가 한 번 이상 해제되는 것을 방지합니다. 참조와 같이 모든 변수가 리소스를 소유하지는 않습니다.
 
-When doing assignments (`let x = y`) or passing function arguments by value
-(`foo(x)`), the *ownership* of the resources is transferred. In Rust-speak, 
-this is known as a *move*.
+할당 (`let x = y`) 또는 값을 통한 함수 인수 전달 (`foo(x)`) 시, 
+*소유권*이 전달됩니다. Rust에서는 이를 *이동*이라고 합니다.
 
-After moving resources, the previous owner can no longer be used. This avoids
-creating dangling pointers.
+리소스를 이동한 후에는 이전 소유자는 더 이상 사용할 수 없습니다. 이는 유효하지 않은 포인터를 생성하는 것을 방지합니다.
 
 ```rust,editable
-// This function takes ownership of the heap allocated memory
+// 이 함수는 힙에 할당된 메모리의 소유권을 가져옵니다
 fn destroy_box(c: Box<i32>) {
     println!("Destroying a box that contains {}", c);
 
-    // `c` is destroyed and the memory freed
+    // `c`가 파괴되고 메모리가 해제됩니다
 }
 
 fn main() {
-    // _Stack_ allocated integer
+    // _스택_에 할당된 정수
     let x = 5u32;
 
-    // *Copy* `x` into `y` - no resources are moved
+    // `x`를 `y`로 *복사* - 리소스가 이동되지 않습니다
     let y = x;
 
-    // Both values can be independently used
+    // 두 값은 독립적으로 사용할 수 있습니다
     println!("x is {}, and y is {}", x, y);
 
-    // `a` is a pointer to a _heap_ allocated integer
+    // `a`는 _힙_에 할당된 정수를 가리키는 포인터입니다
     let a = Box::new(5i32);
 
     println!("a contains: {}", a);
 
-    // *Move* `a` into `b`
+    // `a`를 `b`로 *이동*합니다
     let b = a;
-    // The pointer address of `a` is copied (not the data) into `b`.
-    // Both are now pointers to the same heap allocated data, but
-    // `b` now owns it.
+    // 데이터가 아니라 포인터 주소가 `b`로 복사됩니다.
+    // 두 개 모두 동일한 힙에 할당된 데이터를 가리키지만, `b`가 이제 소유합니다.
     
-    // Error! `a` can no longer access the data, because it no longer owns the
-    // heap memory
+    // 오류! `a`는 더 이상 데이터에 액세스할 수 없습니다. 왜냐하면 이제 힙 메모리를 소유하지 않기 때문입니다
     //println!("a contains: {}", a);
-    // TODO ^ Try uncommenting this line
+    // TODO ^ 해제된 코드를 주석 해제해보세요
 
-    // This function takes ownership of the heap allocated memory from `b`
+    // 이 함수는 `b`에서 힙에 할당된 메모리의 소유권을 가져옵니다
     destroy_box(b);
 
-    // Since the heap memory has been freed at this point, this action would
-    // result in dereferencing freed memory, but it's forbidden by the compiler
-    // Error! Same reason as the previous Error
+    // 이제 힙 메모리가 해제되었기 때문에, 이 작업은 해제된 메모리에 대한 해제를 가져올 것입니다. 하지만 컴파일러가 금지합니다
+    // 오류! 이전 오류와 동일한 이유
     //println!("b contains: {}", b);
-    // TODO ^ Try uncommenting this line
+    // TODO ^ 해제된 코드를 주석 해제해보세요
 }
 ```
 

@@ -1,24 +1,21 @@
-# Struct visibility
+## 구조체 가시성
 
-Structs have an extra level of visibility with their fields. The visibility 
-defaults to private, and can be overridden with the `pub` modifier. This 
-visibility only matters when a struct is accessed from outside the module 
-where it is defined, and has the goal of hiding information (encapsulation).
+구조체는 필드의 추가적인 가시성 레벨을 가지고 있습니다. 가시성은 기본적으로 개방되지 않으며, `pub` 수정자로 재정의할 수 있습니다. 이 가시성은 구조체가 정의된 모듈 외부에서 액세스될 때만 중요하며, 정보를 숨기는 목적(캡슐화)을 가지고 있습니다.
 
 ```rust,editable
 mod my {
-    // A public struct with a public field of generic type `T`
+    // 일반적인 유형 `T`를 가진 공개 구조체와 공개 필드
     pub struct OpenBox<T> {
         pub contents: T,
     }
 
-    // A public struct with a private field of generic type `T`
+    // 일반적인 유형 `T`를 가진 공개 구조체와 개방되지 않은 필드
     pub struct ClosedBox<T> {
         contents: T,
     }
 
     impl<T> ClosedBox<T> {
-        // A public constructor method
+        // 공개 생성자 메서드
         pub fn new(contents: T) -> ClosedBox<T> {
             ClosedBox {
                 contents: contents,
@@ -28,31 +25,5 @@ mod my {
 }
 
 fn main() {
-    // Public structs with public fields can be constructed as usual
-    let open_box = my::OpenBox { contents: "public information" };
-
-    // and their fields can be normally accessed.
-    println!("The open box contains: {}", open_box.contents);
-
-    // Public structs with private fields cannot be constructed using field names.
-    // Error! `ClosedBox` has private fields
-    //let closed_box = my::ClosedBox { contents: "classified information" };
-    // TODO ^ Try uncommenting this line
-
-    // However, structs with private fields can be created using
-    // public constructors
-    let _closed_box = my::ClosedBox::new("classified information");
-
-    // and the private fields of a public struct cannot be accessed.
-    // Error! The `contents` field is private
-    //println!("The closed box contains: {}", _closed_box.contents);
-    // TODO ^ Try uncommenting this line
-}
-```
-
-### See also:
-
-[generics][generics] and [methods][methods]
-
-[generics]: ../generics.md
-[methods]: ../fn/methods.md
+    // 공개 필드를 가진 공개 구조체는 일반적으로 생성할 수 있습니다
+    let open_box = my::OpenBox { contents: "공개 정보

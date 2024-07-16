@@ -1,7 +1,6 @@
-# Multiple bounds
+## 여러 제약 조건
 
-Multiple bounds for a single type can be applied with a `+`. Like normal, different types are
-separated with `,`.
+한 유형에 대해 여러 제약 조건을 `+`를 사용하여 적용할 수 있습니다. 일반적으로 다른 유형은 `，`로 구분됩니다.
 
 ```rust,editable
 use std::fmt::{Debug, Display};
@@ -23,15 +22,15 @@ fn main() {
 
     compare_prints(&string);
     //compare_prints(&array);
-    // TODO ^ Try uncommenting this.
+    // TODO ^ 이 부분을 주석 해제해 보세요.
 
     compare_types(&array, &vec);
 }
 ```
 
-### See also:
+### 참조:
 
-[`std::fmt`][fmt] and [`trait`s][traits]
+[`std::fmt`][fmt] 및 [`trait`s][traits]
 
 [fmt]: ../hello/print.md
 [traits]: ../trait.md

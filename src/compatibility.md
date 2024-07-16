@@ -1,7 +1,5 @@
-# Compatibility
+## 호환성
 
-The Rust language is fastly evolving, and because of this certain compatibility
-issues can arise, despite efforts to ensure forwards-compatibility wherever
-possible.
+Rust 언어는 빠르게 발전하고 있으며, 이로 인해 가능한 한 앞으로의 호환성을 보장하기 위해 노력했음에도 불구하고 특정 호환성 문제가 발생할 수 있습니다.
 
-* [Raw identifiers](compatibility/raw_identifiers.md)
+* [원시 식별자](compatibility/raw_identifiers.md)

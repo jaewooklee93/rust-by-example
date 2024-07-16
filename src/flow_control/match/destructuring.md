@@ -1,16 +1,16 @@
-# Destructuring
+## 구조 분해
 
-A `match` block can destructure items in a variety of ways.
+`match` 블록은 다양한 방식으로 항목을 구조 분해할 수 있습니다.
 
-* [Destructuring Tuples][tuple]
-* [Destructuring Arrays and Slices][slice]
-* [Destructuring Enums][enum]
-* [Destructuring Pointers][refs]
-* [Destructuring Structures][struct]
+* [튜플 구조 분해][tuple]
+* [배열 및 슬라이스 구조 분해][slice]
+* [열거형 구조 분해][enum]
+* [포인터 구조 분해][refs]
+* [구조 구조 분해][struct]
 
 
-[enum]: destructuring/destructure_enum.md
-[refs]: destructuring/destructure_pointers.md
-[struct]: destructuring/destructure_structures.md
-[tuple]: destructuring/destructure_tuple.md
-[slice]: destructuring/destructure_slice.md
+[enum]: 구조_분해/구조_분해_열거형.md
+[refs]: 구조_분해/구조_분해_포인터.md
+[struct]: 구조_분해/구조_분해_구조.md
+[tuple]: 구조_분해/구조_분해_튜플.md
+[slice]: 구조_분해/구조_분해_슬라이스.md

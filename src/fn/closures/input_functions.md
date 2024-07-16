@@ -1,24 +1,20 @@
-# Input functions
+## 입력 함수
 
-Since closures may be used as arguments, you might wonder if the same can be said
-about functions. And indeed they can! If you declare a function that takes a
-closure as parameter, then any function that satisfies the trait bound of that
-closure can be passed as a parameter.
+클로저가 인수로 사용될 수 있기 때문에, 함수도 마찬가지로 사용될 수 있는지 궁금해할 수 있습니다. 물론 가능합니다! 함수가 클로저를 매개변수로 받는다면, 해당 클로저의 트레이트 경계를 충족하는 모든 함수를 매개변수로 전달할 수 있습니다.
 
 ```rust,editable
-// Define a function which takes a generic `F` argument
-// bounded by `Fn`, and calls it
+// `Fn` 트레이트를 충족하는 일반적인 `F` 인수를 받는 함수 정의
 fn call_me<F: Fn()>(f: F) {
     f();
 }
 
-// Define a wrapper function satisfying the `Fn` bound
+// `Fn` 트레이트를 충족하는 래퍼 함수 정의
 fn function() {
     println!("I'm a function!");
 }
 
 fn main() {
-    // Define a closure satisfying the `Fn` bound
+    // `Fn` 트레이트를 충족하는 클로저 정의
     let closure = || println!("I'm a closure!");
 
     call_me(closure);
@@ -26,12 +22,11 @@ fn main() {
 }
 ```
 
-As an additional note, the `Fn`, `FnMut`, and `FnOnce` `traits` dictate how
-a closure captures variables from the enclosing scope.
+추가적으로, `Fn`, `FnMut`, `FnOnce` 트레이트는 클로저가 외부 범위에서 변수를 어떻게 캡처하는지 결정합니다.
 
-### See also:
+### 참조:
 
-[`Fn`][fn], [`FnMut`][fn_mut], and [`FnOnce`][fn_once]
+[`Fn`][fn], [`FnMut`][fn_mut], [`FnOnce`][fn_once]
 
 [fn]: https://doc.rust-lang.org/std/ops/trait.Fn.html
 [fn_mut]: https://doc.rust-lang.org/std/ops/trait.FnMut.html

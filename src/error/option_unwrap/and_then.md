@@ -1,16 +1,13 @@
-# Combinators: `and_then`
+## 조합자: `and_then`
 
-`map()` was described as a chainable way to simplify `match` statements. 
-However, using `map()` on a function that returns an `Option<T>` results 
-in the nested `Option<Option<T>>`. Chaining multiple calls together can 
-then become confusing. That's where another combinator called `and_then()`, 
-known in some languages as flatmap, comes in.
+`map()`는 `match` 문을 간소화하는 연쇄 가능한 방법으로 설명되었습니다. 
+그러나 `map()`을 `Option<T>`를 반환하는 함수에 사용하면 
+`Option<Option<T>>`가 생성되어 여러 호출을 연쇄하면 혼란스러워질 수 있습니다. 바로 그때 `and_then()`이라는 또 다른 조합자가 등장합니다. 일부 언어에서는 `flatmap`라고도 합니다.
 
-`and_then()` calls its function input with the wrapped value and returns the result. If the `Option` is `None`, then it returns `None` instead.
+`and_then()`은 함수 입력으로 감싸진 값을 호출하고 결과를 반환합니다. `Option`이 `None`이면 대신 `None`을 반환합니다.
 
-In the following example, `cookable_v3()` results in an `Option<Food>`. 
-Using `map()` instead of `and_then()` would have given an 
-`Option<Option<Food>>`, which is an invalid type for `eat()`.
+다음 예제에서 `cookable_v3()`는 `Option<Food>`를 결과로 생성합니다. 
+`map()`을 사용하면 `Option<Option<Food>>`가 생성되어 `eat()`에 사용할 수 없는 유효하지 않은 유형이 됩니다.
 
 ```rust,editable
 #![allow(dead_code)]
@@ -18,7 +15,7 @@ Using `map()` instead of `and_then()` would have given an
 #[derive(Debug)] enum Food { CordonBleu, Steak, Sushi }
 #[derive(Debug)] enum Day { Monday, Tuesday, Wednesday }
 
-// We don't have the ingredients to make Sushi.
+// Sushi를 만들 재료가 없습니다.
 fn have_ingredients(food: Food) -> Option<Food> {
     match food {
         Food::Sushi => None,
@@ -26,7 +23,7 @@ fn have_ingredients(food: Food) -> Option<Food> {
     }
 }
 
-// We have the recipe for everything except Cordon Bleu.
+// 모든 요리 레시피가 있지만 Cordon Bleu은 없습니다.
 fn have_recipe(food: Food) -> Option<Food> {
     match food {
         Food::CordonBleu => None,
@@ -34,8 +31,8 @@ fn have_recipe(food: Food) -> Option<Food> {
     }
 }
 
-// To make a dish, we need both the recipe and the ingredients.
-// We can represent the logic with a chain of `match`es:
+// 요리를 위해서는 레시피와 재료가 모두 필요합니다.
+// `match` 문의 연쇄로 논리를 나타낼 수 있습니다:
 fn cookable_v1(food: Food) -> Option<Food> {
     match have_recipe(food) {
         None       => None,
@@ -43,21 +40,20 @@ fn cookable_v1(food: Food) -> Option<Food> {
     }
 }
 
-// This can conveniently be rewritten more compactly with `and_then()`:
+// 이를 `and_then()`으로 더 간결하게 작성할 수 있습니다:
 fn cookable_v3(food: Food) -> Option<Food> {
     have_recipe(food).and_then(have_ingredients)
 }
 
-// Otherwise we'd need to `flatten()` an `Option<Option<Food>>`
-// to get an `Option<Food>`:
+// 그렇지 않으면 `Option<Option<Food>>`를 `Option<Food>`로 `flatten()`해야 합니다.
 fn cookable_v2(food: Food) -> Option<Food> {
     have_recipe(food).map(have_ingredients).flatten()
 }
 
 fn eat(food: Food, day: Day) {
     match cookable_v3(food) {
-        Some(food) => println!("Yay! On {:?} we get to eat {:?}.", day, food),
-        None       => println!("Oh no. We don't get to eat on {:?}?", day),
+        Some(food) => println!("Yay! {:?}에 {:?}를 먹을 수 있습니다.", day, food),
+        None       => println!("Oh no. {:?}에 먹을 수 없나요?", day),
     }
 }
 
@@ -70,7 +66,7 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조:
 
 [closures][closures], [`Option`][option], [`Option::and_then()`][and_then], and [`Option::flatten()`][flatten]
 

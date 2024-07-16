@@ -1,5 +1,4 @@
-# Scoping rules
+## 범위 규칙
 
-Scopes play an important part in ownership, borrowing, and lifetimes.
-That is, they indicate to the compiler when borrows are valid, when 
-resources can be freed, and when variables are created or destroyed.
+범위는 소유권, 대여 및 수명에 중요한 역할을 합니다.
+즉, 컴파일러에게 대여가 유효한 시점, 리소스가 해제될 수 있는 시점, 변수가 생성되거나 소멸되는 시점을 나타냅니다.

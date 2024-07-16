@@ -1,20 +1,21 @@
-# Creating a Library
+## 라이브러리 만들기
 
-Let's create a library, and then see how to link it to another crate.
+라이브러리를 만들고 다른 crate에 연결하는 방법을 살펴보겠습니다.
 
-In `rary.rs`:
+`rary.rs`에 다음과 같이 작성합니다.
 
 ```rust,ignore
 pub fn public_function() {
-    println!("called rary's `public_function()`");
+    println!("rary의 `public_function()`이 호출되었습니다");
 }
 
 fn private_function() {
-    println!("called rary's `private_function()`");
+    println!("rary의 `private_function()`이 호출되었습니다");
 }
 
 pub fn indirect_access() {
-    print!("called rary's `indirect_access()`, that\n> ");
+    print!("rary의 `indirect_access()`가 호출되었습니다, 그
+> ");
 
     private_function();
 }
@@ -26,9 +27,7 @@ $ ls lib*
 library.rlib
 ```
 
-Libraries get prefixed with "lib", and by default they get named after their
-crate file, but this default name can be overridden by passing
-the `--crate-name` option to `rustc` or by using the [`crate_name`
-attribute][crate-name].
+라이브러리는 "lib"로 시작하며, 기본적으로 crate 파일 이름으로 이름이 지정되지만, `rustc`에 `--crate-name` 옵션을 전달하거나 [`crate_name`
+속성][crate-name]을 사용하여 기본 이름을 재정의할 수 있습니다.
 
 [crate-name]: ../attribute/crate.md

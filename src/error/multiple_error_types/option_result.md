@@ -1,7 +1,6 @@
-# Pulling `Result`s out of `Option`s
+## `Option`에서 `Result` 추출하기
 
-The most basic way of handling mixed error types is to just embed them in each
-other.
+다양한 오류 유형을 처리하는 가장 기본적인 방법은 서로에 삽입하는 것입니다.
 
 ```rust,editable
 use std::num::ParseIntError;
@@ -20,15 +19,14 @@ fn main() {
     println!("The first doubled is {:?}", double_first(numbers));
 
     println!("The first doubled is {:?}", double_first(empty));
-    // Error 1: the input vector is empty
+    // 오류 1: 입력 벡터가 비어 있습니다.
 
     println!("The first doubled is {:?}", double_first(strings));
-    // Error 2: the element doesn't parse to a number
+    // 오류 2: 요소가 숫자로 변환되지 않습니다.
 }
 ```
 
-There are times when we'll want to stop processing on errors (like with
-[`?`][enter_question_mark]) but keep going when the `Option` is `None`. The `transpose` function comes in handy to swap the `Result` and `Option`.
+`?` [enter_question_mark] 와 같이 오류 발생 시 처리를 중단하고 싶지만, `Option`이 `None`일 때는 계속 진행하고 싶을 때가 있습니다. `transpose` 함수는 `Result`와 `Option`을 교환하는 데 유용합니다.
 
 ```rust,editable
 use std::num::ParseIntError;

@@ -1,18 +1,17 @@
-# Crates
+## Crate
 
-The `crate_type` attribute can be used to tell the compiler whether a crate is
-a binary or a library (and even which type of library), and the `crate_name`
-attribute can be used to set the name of the crate.
+`crate_type` 속성은 컴파일러에게 crate가
+이진 파일인지 라이브러리인지(그리고 심지어 라이브러리 유형까지)
+을 알려줄 수 있습니다. `crate_name` 속성은 crate의 이름을 설정하는 데 사용됩니다.
 
-However, it is important to note that both the `crate_type` and `crate_name`
-attributes have **no** effect whatsoever when using Cargo, the Rust package
-manager. Since Cargo is used for the majority of Rust projects, this means
-real-world uses of `crate_type` and `crate_name` are relatively limited.
+그러나 `crate_type`과 `crate_name` 속성은 모두 Cargo, Rust 패키지 관리자를 사용할 때
+**아무런 효과도 없다는 점**이 중요합니다. 대부분의 Rust 프로젝트에서 Cargo가 사용되기 때문에,
+실제 세계에서 `crate_type`과 `crate_name`을 사용하는 경우는 상대적으로 제한적입니다.
 
 ```rust,editable
-// This crate is a library
+// 이 crate는 라이브러리입니다
 #![crate_type = "lib"]
-// The library is named "rary"
+// 라이브러리는 "rary" 라는 이름입니다
 #![crate_name = "rary"]
 
 pub fn public_function() {
@@ -30,8 +29,7 @@ pub fn indirect_access() {
 }
 ```
 
-When the `crate_type` attribute is used, we no longer need to pass the
-`--crate-type` flag to `rustc`.
+`crate_type` 속성을 사용하면 `--crate-type` 플래그를 `rustc`에 전달할 필요가 없습니다.
 
 ```shell
 $ rustc lib.rs

@@ -1,19 +1,19 @@
-# C-like
+## C와 유사한 형식
 
-`enum` can also be used as C-like enums.
+`enum`은 C와 유사한 형식으로 사용할 수 있습니다.
 
 ```rust,editable
-// An attribute to hide warnings for unused code.
+// 사용되지 않는 코드에 대한 경고를 숨기는 속성
 #![allow(dead_code)]
 
-// enum with implicit discriminator (starts at 0)
+// 묵시적 구분자를 가진 enum (0부터 시작)
 enum Number {
     Zero,
     One,
     Two,
 }
 
-// enum with explicit discriminator
+// 명시적 구분자를 가진 enum
 enum Color {
     Red = 0xff0000,
     Green = 0x00ff00,
@@ -21,17 +21,17 @@ enum Color {
 }
 
 fn main() {
-    // `enums` can be cast as integers.
+    // `enums`는 정수로 형변환될 수 있습니다.
     println!("zero is {}", Number::Zero as i32);
     println!("one is {}", Number::One as i32);
 
-    println!("roses are #{:06x}", Color::Red as i32);
-    println!("violets are #{:06x}", Color::Blue as i32);
+    println!("장미는 #{:06x}", Color::Red as i32);
+    println!("무궁화는 #{:06x}", Color::Blue as i32);
 }
 ```
 
-### See also:
+### 참조:
 
-[casting][cast]
+[형변환][cast]
 
 [cast]: ../../types/cast.md

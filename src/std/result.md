@@ -1,20 +1,15 @@
-# `Result`
+## `Result`
 
-We've seen that the `Option` enum can be used as a return value from functions
-that may fail, where `None` can be returned to indicate failure. However,
-sometimes it is important to express *why* an operation failed. To do this we 
-have the `Result` enum.
+`Option` enum을 사용하여 함수의 반환 값으로 실패할 수 있는 경우 `None`을 반환하여 실패를 나타낼 수 있다는 것을 알았습니다. 그러나 때로는 작업이 실패한 이유를 명확히 표현하는 것이 중요합니다. 이를 위해 `Result` enum을 사용합니다.
 
-The `Result<T, E>` enum has two variants:
+`Result<T, E>` enum은 두 가지 변형을 가지고 있습니다.
 
-* `Ok(value)` which indicates that the operation succeeded, and wraps the
-  `value` returned by the operation. (`value` has type `T`)
-* `Err(why)`, which indicates that the operation failed, and wraps `why`,
-  which (hopefully) explains the cause of the failure. (`why` has type `E`)
+* `Ok(value)`는 작업이 성공했음을 나타내며, 작업에서 반환된 `value`를 감싸고 있습니다. (`value`는 `T` 유형입니다)
+* `Err(why)`는 작업이 실패했음을 나타내며, `why`를 감싸고 있습니다. (`why`는 `E` 유형입니다) 이는 실패의 원인을 설명합니다.
 
 ```rust,editable,ignore,mdbook-runnable
 mod checked {
-    // Mathematical "errors" we want to catch
+    // 포착하고 싶은 수학적 "오류"
     #[derive(Debug)]
     pub enum MathError {
         DivisionByZero,
@@ -26,11 +21,10 @@ mod checked {
 
     pub fn div(x: f64, y: f64) -> MathResult {
         if y == 0.0 {
-            // This operation would `fail`, instead let's return the reason of
-            // the failure wrapped in `Err`
+            // 이 작업은 `실패`할 것입니다. 대신 `Err`에 감싸서 실패의 이유를 반환합니다
             Err(MathError::DivisionByZero)
         } else {
-            // This operation is valid, return the result wrapped in `Ok`
+            // 이 작업은 유효합니다. `Ok`에 감싸서 결과를 반환합니다
             Ok(x / y)
         }
     }
@@ -54,7 +48,7 @@ mod checked {
 
 // `op(x, y)` === `sqrt(ln(x / y))`
 fn op(x: f64, y: f64) -> f64 {
-    // This is a three level match pyramid!
+    // 이것은 세 단계의 매치 피라미드입니다!
     match checked::div(x, y) {
         Err(why) => panic!("{:?}", why),
         Ok(ratio) => match checked::ln(ratio) {
@@ -68,7 +62,7 @@ fn op(x: f64, y: f64) -> f64 {
 }
 
 fn main() {
-    // Will this fail?
+    // 이것이 실패할까요?
     println!("{}", op(1.0, 10.0));
 }
 ```

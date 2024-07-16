@@ -1,6 +1,6 @@
-# Conventions
+## 관습
 
-In the previous chapter, we saw the following directory hierarchy:
+이전 장에서 다음과 같은 디렉토리 구조를 보았습니다.
 
 ```txt
 foo
@@ -9,12 +9,9 @@ foo
     └── main.rs
 ```
 
-Suppose that we wanted to have two binaries in the same project, though. What
-then?
+만약 같은 프로젝트에 두 개의 실행 파일이 필요하다면 어떻게 해야 할까요?
 
-It turns out that `cargo` supports this. The default binary name is `main`, as
-we saw before, but you can add additional binaries by placing them in a `bin/`
-directory:
+`cargo`는 이를 지원합니다. 기본 실행 파일 이름은 `main` 이지만, `bin/` 디렉토리에 추가 실행 파일을 배치하여 추가 실행 파일을 만들 수 있습니다.
 
 ```txt
 foo
@@ -25,13 +22,10 @@ foo
         └── my_other_bin.rs
 ```
 
-To tell `cargo` to only compile or run this binary, we just pass `cargo` the
-`--bin my_other_bin` flag, where `my_other_bin` is the name of the binary we
-want to work with.
+`cargo`에 해당 실행 파일만 컴파일하거나 실행하도록 지시하려면 `cargo`에 `--bin my_other_bin` 플래그를 전달합니다. 여기서 `my_other_bin`은 작업하려는 실행 파일의 이름입니다.
 
-In addition to extra binaries, `cargo` supports [more features] such as
-benchmarks, tests, and examples.
+추가 실행 파일 외에도 `cargo`는 [더 많은 기능]과 같은 벤치마크, 테스트 및 예제를 지원합니다.
 
-In the next chapter, we will look more closely at tests.
+다음 장에서는 테스트를 자세히 살펴보겠습니다.
 
-[more features]: https://doc.rust-lang.org/cargo/guide/project-layout.html
+[더 많은 기능]: https://doc.rust-lang.org/cargo/guide/project-layout.html

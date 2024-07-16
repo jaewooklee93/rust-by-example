@@ -1,59 +1,55 @@
-# while let
+## while let
 
-Similar to `if let`, `while let` can make awkward `match` sequences
-more tolerable. Consider the following sequence that increments `i`:
+`if let`과 유사하게, `while let`은 어색한 `match` 순서를 더 견딜 수 있게 해줍니다. 다음과 같은 순서를 고려해 보세요. 이 순서는 `i`를 증가시킵니다.
 
 ```rust
-// Make `optional` of type `Option<i32>`
+// `optional`을 `Option<i32>` 유형으로 만듭니다.
 let mut optional = Some(0);
 
-// Repeatedly try this test.
+// 반복적으로 이 테스트를 시도합니다.
 loop {
     match optional {
-        // If `optional` destructures, evaluate the block.
+        // `optional`이 해체되면 블록을 평가합니다.
         Some(i) => {
             if i > 9 {
-                println!("Greater than 9, quit!");
+                println!("9보다 크므로 종료!");
                 optional = None;
             } else {
-                println!("`i` is `{:?}`. Try again.", i);
+                println!("`i`는 `{:?}`입니다. 다시 시도해 보세요.", i);
                 optional = Some(i + 1);
             }
-            // ^ Requires 3 indentations!
+            // ^ 3개의 들여쓰기가 필요합니다!
         },
-        // Quit the loop when the destructure fails:
+        // 해체가 실패하면 루프를 종료합니다:
         _ => { break; }
-        // ^ Why should this be required? There must be a better way!
+        // ^ 이것이 왜 필요한가요? 훨씬 나은 방법이 있어야 합니다!
     }
 }
 ```
 
-Using `while let` makes this sequence much nicer:
+`while let`을 사용하면 이 순서가 훨씬 깔끔해집니다.
 
 ```rust,editable
 fn main() {
-    // Make `optional` of type `Option<i32>`
+    // `optional`을 `Option<i32>` 유형으로 만듭니다.
     let mut optional = Some(0);
     
-    // This reads: "while `let` destructures `optional` into
-    // `Some(i)`, evaluate the block (`{}`). Else `break`.
+    // 이것은 "`let`이 `optional`을 `Some(i)`로 해체하면 블록 (`{}`)을 평가합니다. 그렇지 않으면 `break`"라고 읽습니다.
     while let Some(i) = optional {
         if i > 9 {
-            println!("Greater than 9, quit!");
+            println!("9보다 크므로 종료!");
             optional = None;
         } else {
-            println!("`i` is `{:?}`. Try again.", i);
+            println!("`i`는 `{:?}`입니다. 다시 시도해 보세요.", i);
             optional = Some(i + 1);
         }
-        // ^ Less rightward drift and doesn't require
-        // explicitly handling the failing case.
+        // ^ 오른쪽으로 쏠리는 현상이 줄어들고 명시적으로 실패하는 경우를 처리할 필요가 없습니다.
     }
-    // ^ `if let` had additional optional `else`/`else if`
-    // clauses. `while let` does not have these.
+    // ^ `if let`은 추가적인 선택적 `else`/`else if` 조항이 있었습니다. `while let`은 이러한 조항이 없습니다.
 }
 ```
 
-### See also:
+### 참조:
 
 [`enum`][enum], [`Option`][option], and the [RFC][while_let_rfc]
 

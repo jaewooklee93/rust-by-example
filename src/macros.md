@@ -1,40 +1,29 @@
-# macro_rules!
+## macro_rules!
 
-Rust provides a powerful macro system that allows metaprogramming. As you've
-seen in previous chapters, macros look like functions, except that their name
-ends with a bang `!`, but instead of generating a function call, macros are
-expanded into source code that gets compiled with the rest of the program.
-However, unlike macros in C and other languages, Rust macros are expanded into
-abstract syntax trees, rather than string preprocessing, so you don't get
-unexpected precedence bugs.
+Rust는 강력한 매크로 시스템을 제공하여 메타 프로그래밍이 가능합니다. 이전 장에서 보았듯이 매크로는 함수와 유사하지만 이름이 `!`로 끝나며, 함수 호출을 생성하는 대신 매크로는 프로그램의 나머지 부분과 함께 컴파일되는 소스 코드로 확장됩니다. 그러나 C와 같은 다른 언어의 매크로와 달리 Rust 매크로는 문자열 전처리 대신 추상적인 문법 트리로 확장되므로 예상치 못한 우선순위 오류를 발생시키지 않습니다.
 
-Macros are created using the `macro_rules!` macro.
+매크로는 `macro_rules!` 매크로를 사용하여 생성됩니다.
 
 ```rust,editable
-// This is a simple macro named `say_hello`.
+// `say_hello`라는 간단한 매크로입니다.
 macro_rules! say_hello {
-    // `()` indicates that the macro takes no argument.
+    // `()`는 매크로가 인수를 취하지 않는다는 것을 나타냅니다.
     () => {
-        // The macro will expand into the contents of this block.
+        // 매크로는 이 블록의 내용으로 확장됩니다.
         println!("Hello!")
     };
 }
 
 fn main() {
-    // This call will expand into `println!("Hello!")`
+    // 이 호출은 `println!("Hello!")`로 확장됩니다.
     say_hello!()
 }
 ```
 
-So why are macros useful?
+매크로는 왜 유용할까요?
 
-1. Don't repeat yourself. There are many cases where you may need similar
-   functionality in multiple places but with different types. Often, writing a
-   macro is a useful way to avoid repeating code. (More on this later)
+1. 반복되는 코드를 줄이기. 여러 곳에서 유사한 기능이 필요하지만 다른 유형일 수 있습니다. 자주 매크로를 작성하는 것은 코드를 반복하는 데 유용한 방법입니다. (나중에 자세히 설명)
 
-2. Domain-specific languages. Macros allow you to define special syntax for a
-   specific purpose. (More on this later)
+2. 특정 분야 언어. 매크로는 특정 목적에 대한 특수한 문법을 정의하는 데 사용할 수 있습니다. (나중에 자세히 설명)
 
-3. Variadic interfaces. Sometimes you want to define an interface that takes a
-   variable number of arguments. An example is `println!` which could take any
-   number of arguments, depending on the format string. (More on this later)
+3. 다양한 인터페이스. 때로는 다양한 개수의 인수를 취하는 인터페이스를 정의하고 싶습니다. 예를 들어 `println!`은 형식 문자열에 따라 임의의 개수의 인수를 취할 수 있습니다. (나중에 자세히 설명)

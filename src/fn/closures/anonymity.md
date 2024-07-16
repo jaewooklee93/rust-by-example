@@ -1,33 +1,22 @@
-# Type anonymity
+## 유형 익명성
 
-Closures succinctly capture variables from enclosing scopes. Does this have
-any consequences? It surely does. Observe how using a closure as a function
-parameter requires [generics], which is necessary because of how they are
-defined:
+클로저는 외부 범위의 변수를 간결하게 캡처합니다. 이것이 어떤 결과를 가져올까요? 분명히 그렇습니다. 클로저를 함수 매개변수로 사용하는 방법을 살펴보세요. [제네릭]이 필요합니다. 이는 클로저가 정의되는 방식 때문입니다.
 
 ```rust
-// `F` must be generic.
+// `F`는 제네릭이어야 합니다.
 fn apply<F>(f: F) where
     F: FnOnce() {
     f();
 }
 ```
 
-When a closure is defined, the compiler implicitly creates a new
-anonymous structure to store the captured variables inside, meanwhile
-implementing the functionality via one of the `traits`: `Fn`, `FnMut`, or
-`FnOnce` for this unknown type. This type is assigned to the variable which
-is stored until calling.
+클로저가 정의될 때 컴파일러는 캡처된 변수를 저장하는 새로운 익명 구조를 암시적으로 생성하고 동시에 `traits` 중 하나인 `Fn`, `FnMut` 또는 `FnOnce`를 통해 기능을 구현합니다. 이 유형은 저장된 변수에 할당됩니다.
 
-Since this new type is of unknown type, any usage in a function will require
-generics. However, an unbounded type parameter `<T>` would still be ambiguous
-and not be allowed. Thus, bounding by one of the `traits`: `Fn`, `FnMut`, or
-`FnOnce` (which it implements) is sufficient to specify its type.
+이 새로운 유형은 알 수 없는 유형이므로 함수에서 사용될 때는 제네릭이 필요합니다. 그러나 무제한적인 유형 매개변수 `<T>`는 여전히 모호하며 허용되지 않습니다. 따라서 `traits` 중 하나인 `Fn`, `FnMut` 또는 `FnOnce` (이것이 구현하는 것)로 경계를 설정하면 유형을 명시하는 데 충분합니다.
 
 ```rust,editable
-// `F` must implement `Fn` for a closure which takes no
-// inputs and returns nothing - exactly what is required
-// for `print`.
+// `F`는 입력이 없고 아무것도 반환하지 않는 클로저를 구현해야 합니다.
+// `print`에 필요한 것과 정확히 일치합니다.
 fn apply<F>(f: F) where
     F: Fn() {
     f();
@@ -36,20 +25,18 @@ fn apply<F>(f: F) where
 fn main() {
     let x = 7;
 
-    // Capture `x` into an anonymous type and implement
-    // `Fn` for it. Store it in `print`.
+    // `x`를 익명 유형에 캡처하고 `Fn`을 구현합니다.
     let print = || println!("{}", x);
 
     apply(print);
 }
 ```
 
-### See also:
+### 참조:
 
-[A thorough analysis][thorough_analysis], [`Fn`][fn], [`FnMut`][fn_mut],
-and [`FnOnce`][fn_once]
+[심층 분석][thorough_analysis], [`Fn`][fn], [`FnMut`][fn_mut], 및 [`FnOnce`][fn_once]
 
-[generics]: ../../generics.md
+[제네릭]: ../../generics.md
 [fn]: https://doc.rust-lang.org/std/ops/trait.Fn.html
 [fn_mut]: https://doc.rust-lang.org/std/ops/trait.FnMut.html
 [fn_once]: https://doc.rust-lang.org/std/ops/trait.FnOnce.html

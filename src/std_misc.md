@@ -1,17 +1,16 @@
-# Std misc
+## Std misc
 
-Many other types are provided by the std library to support
-things such as:
+Rust 표준 라이브러리는 여러 유용한 유형을 제공하여 다음과 같은 작업을 지원합니다.
 
-* Threads
-* Channels
-* File I/O
+* 스레드
+* 채널
+* 파일 I/O
 
-These expand beyond what the [primitives] provide.
+이러한 기능은 [기본형]에서 제공하는 것보다 훨씬 광범위합니다.
 
-### See also:
+### 참조
 
-[primitives] and [the std library][std]
+[기본형] 및 [표준 라이브러리][std]
 
-[primitives]: primitives.md
+[기본형]: primitives.md
 [std]: https://doc.rust-lang.org/std/

@@ -1,7 +1,6 @@
-# Custom
+## 사용자 정의
 
-Some conditionals like `target_os` are implicitly provided by `rustc`, but
-custom conditionals must be passed to `rustc` using the `--cfg` flag.
+`target_os`와 같은 일부 조건은 `rustc`에서 암시적으로 제공되지만, 사용자 정의 조건은 `--cfg` 플래그를 사용하여 `rustc`로 전달해야 합니다.
 
 ```rust,editable,ignore,mdbook-runnable
 #[cfg(some_condition)]
@@ -14,9 +13,9 @@ fn main() {
 }
 ```
 
-Try to run this to see what happens without the custom `cfg` flag.
+사용자 정의 `cfg` 플래그 없이 실행해보세요.
 
-With the custom `cfg` flag:
+사용자 정의 `cfg` 플래그를 사용하면:
 
 ```shell
 $ rustc --cfg some_condition custom.rs && ./custom

@@ -1,49 +1,46 @@
-# Comments
+## 주석
 
-Any program requires comments, and Rust supports
-a few different varieties:
+모든 프로그램은 주석이 필요하며, Rust는 몇 가지 다른 유형을 지원합니다.
 
-* *Regular comments* which are ignored by the compiler:
-  * `// Line comments which go to the end of the line.`
-  * `/* Block comments which go to the closing delimiter. */`
-* *Doc comments* which are parsed into HTML library [documentation][docs]:
-  * `/// Generate library docs for the following item.`
-  * `//! Generate library docs for the enclosing item.`
+* *일반 주석*은 컴파일러에서 무시됩니다.
+  * `// 줄 주석은 줄의 끝까지 진행됩니다.`
+  * `/* 블록 주석은 닫는 구분 기호까지 진행됩니다. */`
+* *문서 주석*은 HTML 라이브러리 문서 [문서][docs]로 분석됩니다.
+  * `/// 다음 항목에 대한 라이브러리 문서를 생성합니다.`
+  * `//! 둘러싸는 항목에 대한 라이브러리 문서를 생성합니다.`
 
 ```rust,editable
 fn main() {
-    // This is an example of a line comment.
-    // There are two slashes at the beginning of the line.
-    // And nothing written after these will be read by the compiler.
+    // 이것은 줄 주석의 예입니다.
+    // 두 개의 슬래시가 줄의 시작 부분에 있습니다.
+    // 이 두 개의 슬래시 이후로 작성된 내용은 컴파일러에서 읽히지 않습니다.
 
     // println!("Hello, world!");
 
-    // Run it. See? Now try deleting the two slashes, and run it again.
+    // 실행해보세요. 알겠죠? 이제 두 개의 슬래시를 삭제하고 다시 실행해보세요.
 
     /*
-     * This is another type of comment, a block comment. In general,
-     * line comments are the recommended comment style. But block comments
-     * are extremely useful for temporarily disabling chunks of code.
-     * /* Block comments can be /* nested, */ */ so it takes only a few
-     * keystrokes to comment out everything in this main() function.
-     * /*/*/* Try it yourself! */*/*/
+     * 이것은 또 다른 주석 유형인 블록 주석입니다. 일반적으로,
+     * 줄 주석이 권장되는 주석 스타일입니다. 하지만 블록 주석은
+     * 코드의 일부를 일시적으로 비활성화하는 데 매우 유용합니다.
+     * /* 블록 주석은 /* 깊이 넣을 수 있으므로 */ */  이 `main()` 함수의 모든 내용을 주석으로 처리하는 데 몇 개의 키 스트로크만 필요합니다.
+     * /*/*/* 자신도 시도해보세요! */*/*/
      */
 
     /*
-    Note: The previous column of `*` was entirely for style. There's
-    no actual need for it.
+    참고: 이전 열의 `*`은 스타일을 위해서만 사용되었습니다. 실제로는 필요하지 않습니다.
     */
 
-    // You can manipulate expressions more easily with block comments
-    // than with line comments. Try deleting the comment delimiters
-    // to change the result:
+    // 블록 주석을 사용하면 표현식을 더 쉽게 조작할 수 있습니다.
+    // 줄 주석보다.
+    // 주석 구분 기호를 삭제하여 결과를 변경해보세요:
     let x = 5 + /* 90 + */ 5;
     println!("Is `x` 10 or 100? x = {}", x);
 }
 ```
 
-### See also:
+### 참조:
 
-[Library documentation][docs]
+[라이브러리 문서][docs]
 
 [docs]: ../meta/doc.md

@@ -1,18 +1,15 @@
-# DRY (Don't Repeat Yourself)
+## DRY (반복을 피하세요)
 
-Macros allow writing DRY code by factoring out the common parts of functions
-and/or test suites. Here is an example that implements and tests the `+=`, `*=`
-and `-=` operators on `Vec<T>`:
+메이커는 함수 및/또는 테스트 스위트의 공통 부분을 추출하여 DRY 코드를 작성하는 데 사용할 수 있습니다. 다음은 `Vec<T>`에 `+=`, `*=` 및 `-=` 연산자를 구현하고 테스트하는 예입니다.
 
 ```rust,editable
 use std::ops::{Add, Mul, Sub};
 
 macro_rules! assert_equal_len {
-    // The `tt` (token tree) designator is used for
-    // operators and tokens.
+    // `tt` (토큰 트리) 지정자는 연산자 및 토큰에 사용됩니다.
     ($a:expr, $b:expr, $func:ident, $op:tt) => {
         assert!($a.len() == $b.len(),
-                "{:?}: dimension mismatch: {:?} {:?} {:?}",
+                "{:?}: 차원 일치 오류: {:?} {:?} {:?}",
                 stringify!($func),
                 ($a.len(),),
                 stringify!($op),
@@ -33,7 +30,7 @@ macro_rules! op {
     };
 }
 
-// Implement `add_assign`, `mul_assign`, and `sub_assign` functions.
+// `add_assign`, `mul_assign`, `sub_assign` 함수를 구현합니다.
 op!(add_assign, Add, +=, add);
 op!(mul_assign, Mul, *=, mul);
 op!(sub_assign, Sub, -=, sub);
@@ -57,7 +54,7 @@ mod test {
         };
     }
 
-    // Test `add_assign`, `mul_assign`, and `sub_assign`.
+    // `add_assign`, `mul_assign`, `sub_assign` 테스트.
     test!(add_assign, 1u32, 2u32, 3u32);
     test!(mul_assign, 2u32, 3u32, 6u32);
     test!(sub_assign, 3u32, 2u32, 1u32);

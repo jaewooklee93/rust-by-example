@@ -1,10 +1,6 @@
-# `?`
+## `?`
 
-Chaining results using match can get pretty untidy; luckily, the `?` operator
-can be used to make things pretty again. `?` is used at the end of an expression
-returning a `Result`, and is equivalent to a match expression, where the 
-`Err(err)` branch expands to an early `return Err(From::from(err))`, and the `Ok(ok)`
-branch expands to an `ok` expression.
+`match`를 사용하여 결과를 연결하는 것은 꽤 깔끔하지 않을 수 있습니다. 다행히 `?` 연산자를 사용하면 다시 깔끔하게 만들 수 있습니다. `?`는 `Result`를 반환하는 표현식의 끝에 사용되며, `Err(err)` 항이 `return Err(From::from(err))`로 확장되고 `Ok(ok)` 항이 `ok` 표현식으로 확장되는 `match` 표현식과 동일합니다.
 
 ```rust,editable,ignore,mdbook-runnable
 mod checked {
@@ -41,12 +37,12 @@ mod checked {
         }
     }
 
-    // Intermediate function
+    // 중간 함수
     fn op_(x: f64, y: f64) -> MathResult {
-        // if `div` "fails", then `DivisionByZero` will be `return`ed
+        // `div`가 "실패"하면 `DivisionByZero`가 `return`될 것입니다
         let ratio = div(x, y)?;
 
-        // if `ln` "fails", then `NonPositiveLogarithm` will be `return`ed
+        // `ln`이 "실패"하면 `NonPositiveLogarithm`이 `return`될 것입니다
         let ln = ln(ratio)?;
 
         sqrt(ln)
@@ -56,11 +52,11 @@ mod checked {
         match op_(x, y) {
             Err(why) => panic!("{}", match why {
                 MathError::NonPositiveLogarithm
-                    => "logarithm of non-positive number",
+                    => "로그의 비음수",
                 MathError::DivisionByZero
-                    => "division by zero",
+                    => "0으로 나누기",
                 MathError::NegativeSquareRoot
-                    => "square root of negative number",
+                    => "음수의 제곱근",
             }),
             Ok(value) => println!("{}", value),
         }
@@ -72,7 +68,6 @@ fn main() {
 }
 ```
 
-Be sure to check the [documentation][docs],
-as there are many methods to map/compose `Result`.
+[documentation][docs]를 확인하십시오. `Result`를 매핑/조합하는 방법은 많습니다.
 
 [docs]: https://doc.rust-lang.org/std/result/index.html

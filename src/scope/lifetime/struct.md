@@ -1,21 +1,20 @@
-# Structs
+## 구조체
 
-Annotation of lifetimes in structures are also similar to functions:
+구조체에서의 라이프타임 표시는 함수와 유사합니다.
 
 ```rust,editable
-// A type `Borrowed` which houses a reference to an
-// `i32`. The reference to `i32` must outlive `Borrowed`.
+// `Borrowed` 타입은 `i32` 참조를 저장합니다. `i32` 참조는 `Borrowed`가 살아있는 동안 유효해야 합니다.
 #[derive(Debug)]
 struct Borrowed<'a>(&'a i32);
 
-// Similarly, both references here must outlive this structure.
+// 마찬가지로, 두 참조도 이 구조체가 살아있는 동안 유효해야 합니다.
 #[derive(Debug)]
 struct NamedBorrowed<'a> {
     x: &'a i32,
     y: &'a i32,
 }
 
-// An enum which is either an `i32` or a reference to one.
+// `i32` 또는 `i32` 참조 중 하나를 저장하는 `enum`입니다.
 #[derive(Debug)]
 enum Either<'a> {
     Num(i32),
@@ -31,16 +30,16 @@ fn main() {
     let reference = Either::Ref(&x);
     let number    = Either::Num(y);
 
-    println!("x is borrowed in {:?}", single);
-    println!("x and y are borrowed in {:?}", double);
-    println!("x is borrowed in {:?}", reference);
-    println!("y is *not* borrowed in {:?}", number);
+    println!("x는 {:?}에 참조됩니다")", single);
+    println!("x와 y는 {:?}에 참조됩니다")", double);
+    println!("x는 {:?}에 참조됩니다")", reference);
+    println!("y는 {:?}에 참조되지 않습니다")", number);
 }
 ```
 
-### See also:
+### 참조:
 
-[`struct`s][structs]
+[`구조체`][structs]
 
 
 [structs]: ../../custom_types/structs.md

@@ -1,42 +1,31 @@
-# Lifetimes
+## 라이프타임
 
-A *lifetime* is a construct the compiler (or more specifically, its *borrow
-checker*) uses to ensure all borrows are valid. Specifically, a variable's
-lifetime begins when it is created and ends when it is destroyed. While
-lifetimes and scopes are often referred to together, they are not the same.
+*라이프타임*은 컴파일러(더 정확하게는 *빌려오는 검사기*)가 모든 빌려오는 작업이 유효하도록 보장하기 위해 사용하는 구조입니다. 구체적으로, 변수의 라이프타임은 생성될 때 시작되고 소멸될 때 끝납니다. 라이프타임과 범위는 자주 함께 언급되지만, 동일하지 않습니다.
 
-Take, for example, the case where we borrow a variable via `&`. The
-borrow has a lifetime that is determined by where it is declared. As a result,
-the borrow is valid as long as it ends before the lender is destroyed. However,
-the scope of the borrow is determined by where the reference is used.
+예를 들어, `&`를 사용하여 변수를 빌려오는 경우, 빌려오는 작업은 선언된 위치에 따라 결정되는 라이프타임을 가지게 됩니다. 결과적으로, 빌려오는 작업은 빌려주는 변수가 소멸되기 전에 끝나야 유효합니다. 그러나 빌려오는 작업의 범위는 참조가 사용되는 위치에 따라 결정됩니다.
 
-In the following example and in the rest of this section, we will see how
-lifetimes relate to scopes, as well as how the two differ.
+다음 예제와 이 섹션의 나머지 부분에서는 라이프타임이 범위와 관련되는 방식, 그리고 두 가지가 어떻게 다르게 작동하는지 살펴보겠습니다.
 
 ```rust,editable
-// Lifetimes are annotated below with lines denoting the creation
-// and destruction of each variable.
-// `i` has the longest lifetime because its scope entirely encloses 
-// both `borrow1` and `borrow2`. The duration of `borrow1` compared 
-// to `borrow2` is irrelevant since they are disjoint.
+// 라이프타임은 아래 줄에 표시되어 있으며, 각 변수의 생성 및 소멸을 나타냅니다.
+// `i`는 범위가 `borrow1`과 `borrow2`를 모두 포함하기 때문에 가장 긴 라이프타임을 가지고 있습니다. `borrow1`과 `borrow2`의 지속 시간은 서로 독립적이기 때문에 중요하지 않습니다.
 fn main() {
-    let i = 3; // Lifetime for `i` starts. ────────────────┐
+    let i = 3; // `i`의 라이프타임 시작. ────────────────┐
     //                                                     │
     { //                                                   │
-        let borrow1 = &i; // `borrow1` lifetime starts. ──┐│
+        let borrow1 = &i; // `borrow1` 라이프타임 시작. ──┐│
         //                                                ││
         println!("borrow1: {}", borrow1); //              ││
-    } // `borrow1` ends. ─────────────────────────────────┘│
+    } // `borrow1` 종료. ─────────────────────────────────┘│
     //                                                     │
     //                                                     │
     { //                                                   │
-        let borrow2 = &i; // `borrow2` lifetime starts. ──┐│
+        let borrow2 = &i; // `borrow2` 라이프타임 시작. ──┐│
         //                                                ││
         println!("borrow2: {}", borrow2); //              ││
-    } // `borrow2` ends. ─────────────────────────────────┘│
+    } // `borrow2` 종료. ─────────────────────────────────┘│
     //                                                     │
-}   // Lifetime ends. ─────────────────────────────────────┘
+}   // 라이프타임 종료. ─────────────────────────────────────┘
 ```
 
-Note that no names or types are assigned to label lifetimes.
-This restricts how lifetimes will be able to be used as we will see.
+참고로, 라이프타임에 이름이나 유형이 할당되지 않습니다. 이는 라이프타임이 사용될 수 있는 방식을 제한합니다. 이후에 살펴보겠습니다.

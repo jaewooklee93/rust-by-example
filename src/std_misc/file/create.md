@@ -1,8 +1,7 @@
-# `create`
+## `create`
 
-The `create` function opens a file in write-only mode. If the file
-already existed, the old content is destroyed. Otherwise, a new file is
-created.
+`create` 함수는 파일을 쓰기 전용 모드로 열습니다. 파일이 이미 존재하면
+기존 내용이 삭제됩니다. 그렇지 않으면 새 파일이 생성됩니다.
 
 ```rust,ignore
 static LOREM_IPSUM: &str =
@@ -22,13 +21,13 @@ fn main() {
     let path = Path::new("lorem_ipsum.txt");
     let display = path.display();
 
-    // Open a file in write-only mode, returns `io::Result<File>`
+    // 쓰기 전용 모드로 파일 열기, `io::Result<File>` 반환
     let mut file = match File::create(&path) {
         Err(why) => panic!("couldn't create {}: {}", display, why),
         Ok(file) => file,
     };
 
-    // Write the `LOREM_IPSUM` string to `file`, returns `io::Result<()>`
+    // `LOREM_IPSUM` 문자열을 `file`로 쓰기, `io::Result<()>` 반환
     match file.write_all(LOREM_IPSUM.as_bytes()) {
         Err(why) => panic!("couldn't write to {}: {}", display, why),
         Ok(_) => println!("successfully wrote to {}", display),
@@ -36,7 +35,7 @@ fn main() {
 }
 ```
 
-Here's the expected successful output:
+다음은 예상되는 성공적인 출력입니다.
 
 ```shell
 $ rustc create.rs && ./create
@@ -50,9 +49,8 @@ cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
 
-(As in the previous example, you are encouraged to test this example under
-failure conditions.)
+ (이전 예제와 같이, 실패 조건에서 이 예제를 테스트하는 것이 좋습니다.)
 
-The [`OpenOptions`] struct can be used to configure how a file is opened.
+[`OpenOptions`] 구조체를 사용하여 파일이 어떻게 열리는지 구성할 수 있습니다.
 
 [`OpenOptions`]: https://doc.rust-lang.org/std/fs/struct.OpenOptions.html

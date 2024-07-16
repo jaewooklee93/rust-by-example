@@ -1,39 +1,27 @@
-# Testcase: map-reduce
+## 테스트 케이스: 맵-리듀스
 
-Rust makes it very easy to parallelise data processing, without many of the headaches traditionally associated with such an attempt.
+Rust는 데이터 처리를 병렬화하는 데 매우 쉽습니다. 전통적으로 이러한 시도와 관련된 많은 어려움을 피할 수 있습니다.
 
-The standard library provides great threading primitives out of the box.
-These, combined with Rust's concept of Ownership and aliasing rules, automatically prevent
-data races.
+표준 라이브러리는 훌륭한 스레드 프레임워크를 제공합니다.
+이러한 프레임워크는 Rust의 소유권 및 별칭 규칙 개념과 결합되어 데이터 레이스를 자동으로 방지합니다.
 
-The aliasing rules (one writable reference XOR many readable references) automatically prevent
-you from manipulating state that is visible to other threads. (Where synchronisation is needed,
-there are synchronisation
-primitives like `Mutex`es or `Channel`s.)
+별칭 규칙(쓰기 가능한 참조 하나 XOR 읽기 가능한 참조 여러 개)은 다른 스레드에 의해 표시되는 상태를 조작하는 것을 자동으로 방지합니다. (동기화가 필요한 경우 `Mutex` 또는 `Channel`과 같은 동기화 프레임워크가 있습니다.)
 
-In this example, we will calculate the sum of all digits in a block of numbers.
-We will do this by parcelling out chunks of the block into different threads. Each thread will sum
-its tiny block of digits, and subsequently we will sum the intermediate sums produced by each
-thread.
+이 예제에서는 숫자 블록의 모든 숫자의 합을 계산합니다. 이를 위해 블록의 조각을 다른 스레드로 나눕니다. 각 스레드는 작은 숫자 블록의 합을 계산하고, 이후 각 스레드에서 생성된 중간 합을 합산합니다.
 
-Note that, although we're passing references across thread boundaries, Rust understands that we're
-only passing read-only references, and that thus no unsafety or data races can occur. Also because
-the references we're passing have `'static` lifetimes, Rust understands that our data won't be
-destroyed while these threads are still running. (When you need to share non-`static` data between
-threads, you can use a smart pointer like `Arc` to keep the data alive and avoid non-`static`
-lifetimes.)
+참고로 스레드 경계를 넘어 참조를 전달하고 있지만, Rust는 우리가 읽기 전용 참조만 전달하고 있음을 이해하며, 따라서 안전하지 않거나 데이터 레이스가 발생할 수 없습니다. 또한 전달하는 참조가 `'static` 라이프타임을 가지고 있기 때문에 Rust는 우리의 데이터가 이 스레드가 실행 중인 동안 파괴되지 않음을 이해합니다. (스레드 간에 비 `'static` 데이터를 공유해야 하는 경우 `Arc`와 같은 스마트 포인터를 사용하여 데이터를 유지하고 비 `'static` 라이프타임을 피할 수 있습니다.)
 
 ```rust,editable
 use std::thread;
 
-// This is the `main` thread
+// 이것은 `main` 스레드입니다
 fn main() {
 
-    // This is our data to process.
-    // We will calculate the sum of all digits via a threaded map-reduce algorithm.
-    // Each whitespace separated chunk will be handled in a different thread.
+    // 이것은 처리할 데이터입니다.
+    // 우리는 스레드 기반 맵-리듀스 알고리즘을 사용하여 모든 숫자의 합을 계산합니다.
+    // 각 빈칸으로 구분된 블록이 다른 스레드에서 처리됩니다.
     //
-    // TODO: see what happens to the output if you insert spaces!
+    // TODO: 빈칸을 삽입하면 출력이 어떻게 변하는지 확인하세요!
     let data = "86967897737416471853297327050364959
 11861322575564723963297542624962850
 70856234701860851907960690014725639
@@ -43,56 +31,53 @@ fn main() {
 69920216438980873548808413720956532
 16278424637452589860345374828574668";
 
-    // Make a vector to hold the child-threads which we will spawn.
+    // 자식 스레드를 저장할 벡터를 만듭니다.
     let mut children = vec![];
 
     /*************************************************************************
-     * "Map" phase
+     * "맵" 단계
      *
-     * Divide our data into segments, and apply initial processing
+     * 데이터를 세그먼트로 나누고 초기 처리를 적용합니다
      ************************************************************************/
 
-    // split our data into segments for individual calculation
-    // each chunk will be a reference (&str) into the actual data
+    // 데이터를 세그먼트로 나누고 개별 계산을 위한 참조를 만듭니다.
+    // 각 덩어리는 실제 데이터에 대한 참조(&str)입니다.
     let chunked_data = data.split_whitespace();
 
-    // Iterate over the data segments.
-    // .enumerate() adds the current loop index to whatever is iterated
-    // the resulting tuple "(index, element)" is then immediately
-    // "destructured" into two variables, "i" and "data_segment" with a
-    // "destructuring assignment"
+    // 데이터 세그먼트를 반복합니다.
+    // .enumerate()는 현재 루프 인덱스를 반복되는 항목에 추가합니다.
+    // 결과 튜플 "(index, element)"는 즉시 "destructuring assignment"으로 두 변수 "i"와 "data_segment"로 분해됩니다.
     for (i, data_segment) in chunked_data.enumerate() {
-        println!("data segment {} is \"{}\"", i, data_segment);
+        println!("데이터 세그먼트 {}는 \"{}\"" , i, data_segment);
 
-        // Process each data segment in a separate thread
+        // 각 데이터 세그먼트를 별도의 스레드에서 처리합니다.
         //
-        // spawn() returns a handle to the new thread,
-        // which we MUST keep to access the returned value
+        // spawn()는 새 스레드에 대한 핸들을 반환합니다.
+        // 이 핸들은 새 스레드의 결과를 가져오기 위해 반드시 유지해야 합니다.
         //
-        // 'move || -> u32' is syntax for a closure that:
-        // * takes no arguments ('||')
-        // * takes ownership of its captured variables ('move') and
-        // * returns an unsigned 32-bit integer ('-> u32')
+        // 'move || -> u32'는 폐쇄 문법입니다.
+        // * 인수를 취하지 않습니다 ('||')
+        // * 캡처된 변수의 소유권을 가져옵니다 ('move')
+        // * 32비트 무符号 정수 ('-> u32')를 반환합니다.
         //
-        // Rust is smart enough to infer the '-> u32' from
-        // the closure itself so we could have left that out.
+        // Rust는 '-> u32'를 폐쇄에서 반환하는 값으로부터 추론할 수 있습니다.
+        // 즉시 실행되는 함수를 닫기 때문에, 이 부분을 생략해도 괜찮습니다.
         //
-        // TODO: try removing the 'move' and see what happens
+        // TODO: 'move'를 제거하고 실행 결과를 확인해보세요
         children.push(thread::spawn(move || -> u32 {
-            // Calculate the intermediate sum of this segment:
+            // 해당 구간의 중간 합을 계산합니다:
             let result = data_segment
-                        // iterate over the characters of our segment..
+                        // 문자열 구간의 각 문자를 반복합니다..
                         .chars()
-                        // .. convert text-characters to their number value..
-                        .map(|c| c.to_digit(10).expect("should be a digit"))
-                        // .. and sum the resulting iterator of numbers
+                        // .. 문자를 숫자 값으로 변환합니다..
+                        .map(|c| c.to_digit(10).expect("숫자여야 합니다"))
+                        // .. 숫자로 변환된 이터레이터의 합을 계산합니다
                         .sum();
 
-            // println! locks stdout, so no text-interleaving occurs
-            println!("processed segment {}, result={}", i, result);
+            // println!은 stdout을 잠그므로, 텍스트가 섞이지 않습니다.
+            println!("처리된 구간 {}, 결과={}", i, result);
 
-            // "return" not needed, because Rust is an "expression language", the
-            // last evaluated expression in each block is automatically its value.
+            // "return"이 필요하지 않습니다. Rust는 "표현식 언어"이기 때문에, 각 블록의 마지막 평가된 표현식이 자동으로 그 값이 됩니다.
             result
 
         }));
@@ -100,44 +85,42 @@ fn main() {
 
 
     /*************************************************************************
-     * "Reduce" phase
+     * "Reduce" 단계
      *
-     * Collect our intermediate results, and combine them into a final result
+     * 중간 결과를 수집하고, 최종 결과로 결합합니다
      ************************************************************************/
 
-    // combine each thread's intermediate results into a single final sum.
+    // 각 스레드의 중간 결과를 하나의 최종 합으로 결합합니다.
     //
-    // we use the "turbofish" ::<> to provide sum() with a type hint.
+    // "turbofish" ::<>를 사용하여 sum()에 유형 힌트를 제공합니다.
     //
-    // TODO: try without the turbofish, by instead explicitly
-    // specifying the type of final_result
+    // TODO: turbofish 없이, final_result의 유형을 명시적으로 지정하여 시도해보세요
     let final_result = children.into_iter().map(|c| c.join().unwrap()).sum::<u32>();
 
-    println!("Final sum result: {}", final_result);
+    println!("최종 합 결과: {}", final_result);
 }
 
 
 ```
 
-### Assignments
-It is not wise to let our number of threads depend on user inputted data.
-What if the user decides to insert a lot of spaces? Do we _really_ want to spawn 2,000 threads?
-Modify the program so that the data is always chunked into a limited number of chunks,
-defined by a static constant at the beginning of the program.
+### 과제
+사용자 입력 데이터에 따라 스레드 수를 결정하는 것은 현명하지 않습니다.
+사용자가 많은 공백을 입력하도록 하면, 2,000개의 스레드를 생성하고 싶을까요?
+프로그램을 수정하여 데이터가 항상 프로그램의 시작 부분에 정의된 제한된 개수의 덩어리로 나뉘도록 합니다.
 
-### See also:
-* [Threads][thread]
-* [vectors][vectors] and [iterators][iterators]
-* [closures][closures], [move][move] semantics and [`move` closures][move_closure]
-* [destructuring][destructuring] assignments
-* [turbofish notation][turbofish] to help type inference
+### 참조
+* [스레드][thread]
+* [벡터][vectors] 및 [이터레이터][iterators]
+* [클로저][closures], [move][move] 세mantics 및 [`move` 클로저][move_closure]
+* [구조 분해][destructuring] 할당
+* [turbofish 표기법][turbofish]을 사용하여 유형 추론을 돕습니다.
 * [unwrap vs. expect][unwrap]
 * [enumerate][enumerate]
 
 [thread]: ../threads.md
 [vectors]: ../../std/vec.md
 [iterators]: ../../trait/iter.md
-[destructuring]: https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html#destructuring-to-break-apart-values
+[destructuring]: https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html?highlight=destructuring
 [closures]: ../../fn/closures.md
 [move]: ../../scope/move.md
 [move_closure]: https://doc.rust-lang.org/book/ch13-01-closures.html#closures-can-capture-their-environment

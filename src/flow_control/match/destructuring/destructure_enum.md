@@ -1,17 +1,17 @@
-# enums
+## enum
 
-An `enum` is destructured similarly:
+`enum`은 다음과 같이 해체됩니다.
 
 ```rust,editable
-// `allow` required to silence warnings because only
-// one variant is used.
+// `allow`는 왜곡된 코드 경고를 무시하기 위해 필요합니다. 왜냐하면
+// 하나의 변이체만 사용되기 때문입니다.
 #[allow(dead_code)]
 enum Color {
-    // These 3 are specified solely by their name.
+    // 이 3개는 이름만으로 명시됩니다.
     Red,
     Blue,
     Green,
-    // These likewise tie `u32` tuples to different names: color models.
+    // 이 또한 `u32` 튜플을 다른 이름과 연결합니다: 색 모델.
     RGB(u32, u32, u32),
     HSV(u32, u32, u32),
     HSL(u32, u32, u32),
@@ -21,34 +21,34 @@ enum Color {
 
 fn main() {
     let color = Color::RGB(122, 17, 40);
-    // TODO ^ Try different variants for `color`
+    // TODO ^ `color`에 다른 변이체를 시도해보세요
 
-    println!("What color is it?");
-    // An `enum` can be destructured using a `match`.
+    println!("무슨 색일까요?");
+    // `enum`은 `match`를 사용하여 해체할 수 있습니다.
     match color {
-        Color::Red   => println!("The color is Red!"),
-        Color::Blue  => println!("The color is Blue!"),
-        Color::Green => println!("The color is Green!"),
+        Color::Red   => println!("색은 Red입니다!"),
+        Color::Blue  => println!("색은 Blue입니다!"),
+        Color::Green => println!("색은 Green입니다!"),
         Color::RGB(r, g, b) =>
-            println!("Red: {}, green: {}, and blue: {}!", r, g, b),
+            println!("빨강: {}, 초록: {}, 파랑: {}!", r, g, b),
         Color::HSV(h, s, v) =>
-            println!("Hue: {}, saturation: {}, value: {}!", h, s, v),
+            println!("색조: {}, 채도: {}, 가치: {}!", h, s, v),
         Color::HSL(h, s, l) =>
-            println!("Hue: {}, saturation: {}, lightness: {}!", h, s, l),
+            println!("색조: {}, 채도: {}, 명도: {}!", h, s, l),
         Color::CMY(c, m, y) =>
-            println!("Cyan: {}, magenta: {}, yellow: {}!", c, m, y),
+            println!("청록색: {}, 자홍색: {}, 노랑색: {}!", c, m, y),
         Color::CMYK(c, m, y, k) =>
-            println!("Cyan: {}, magenta: {}, yellow: {}, key (black): {}!",
+            println!("청록색: {}, 자홍색: {}, 노랑색: {}, 검정색 (키): {}!",
                 c, m, y, k),
-        // Don't need another arm because all variants have been examined
+        // 다른 팔이 필요하지 않습니다. 모든 변이체가 검토되었습니다.
     }
 }
 ```
 
-### See also:
+### 참조:
 
-[`#[allow(...)]`][allow], [color models][color_models] and [`enum`][enum]
+[`#[allow(...)]`][allow], [색 모델][color_models] 및 [`enum`][enum]
 
 [allow]: ../../../attribute/unused.md
-[color_models]: https://en.wikipedia.org/wiki/Color_model
+[color_models]: https://ko.wikipedia.org/wiki/색_모델
 [enum]: ../../../custom_types/enum.md

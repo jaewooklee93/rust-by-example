@@ -1,27 +1,22 @@
-# Attributes
+## 속성
 
-An attribute is metadata applied to some module, crate or item. This metadata
-can be used to/for:
+속성은 모듈, 크레이트 또는 항목에 적용되는 메타데이터입니다. 이 메타데이터는 다음과 같은 용도로 사용될 수 있습니다.
 
-<!-- TODO: Link these to their respective examples -->
+<!-- TODO: 이들을 각각의 예제로 연결하세요 -->
 
-* [conditional compilation of code][cfg]
-* [set crate name, version and type (binary or library)][crate]
-* disable [lints][lint] (warnings)
-* enable compiler features (macros, glob imports, etc.)
-* link to a foreign library
-* mark functions as unit tests
-* mark functions that will be part of a benchmark
-* [attribute like macros][macros]
+* 코드의 조건적 컴파일 [cfg]
+* 크레이트 이름, 버전 및 유형(이진 파일 또는 라이브러리) 설정 [crate]
+* [lint] (경고) 비활성화
+* 컴파일러 기능(메이커, 글로벌 임포트 등) 활성화
+* 외래 라이브러리 연결
+* 함수를 단위 테스트로 표시
+* 벤치마크에 포함될 함수를 표시
+* [속성과 유사한 메이커] [macros]
 
-Attributes look like `#[outer_attribute]` or `#![inner_attribute]`,
-with the difference between them being where they apply.
+속성은 `#[outer_attribute]` 또는 `#![inner_attribute]`와 같이 표시되며,
+차이점은 어디에 적용되는지에 있습니다.
 
-- `#[outer_attribute]` applies to the [item][item] immediately
-  following it. Some examples of items are: a function, a module
-  declaration, a constant, a structure, an enum. Here is an example
-  where attribute `#[derive(Debug)]` applies to the struct
-  `Rectangle`:
+- `#[outer_attribute]`는 바로 뒤에 있는 [항목]에 적용됩니다. 항목의 예로는 함수, 모듈 선언, 상수, 구조체, 열거형이 있습니다. `#[derive(Debug)]` 속성이 `Rectangle` 구조체에 적용되는 예시입니다:
   ```rust
   #[derive(Debug)]
   struct Rectangle {
@@ -30,26 +25,22 @@ with the difference between them being where they apply.
   }
   ```
 
-- `#![inner_attribute]` applies to the enclosing [item][item] (typically a
-  module or a crate). In other words, this attribute is interpreted as
-  applying to the entire scope in which it's placed. Here is an example
-  where `#![allow(unused_variables)]` applies to the whole crate (if
-  placed in `main.rs`):
+- `#![inner_attribute]`는 둘러싸는 [항목]에 적용됩니다 (일반적으로 모듈 또는 크레이트). 즉, 이 속성은 놓인 범위 전체에 적용되는 것으로 해석됩니다. `#![allow(unused_variables)]`가 `main.rs`에 있는 경우 전체 크레이트에 적용되는 예시입니다:
   ```rust
   #![allow(unused_variables)]
 
   fn main() {
-      let x = 3; // This would normally warn about an unused variable.
+      let x = 3; // 이것은 일반적으로 사용되지 않는 변수에 대한 경고를 표시합니다.
   }
   ```
 
-Attributes can take arguments with different syntaxes:
+속성은 다양한 문법으로 인수를 받을 수 있습니다.
 
 * `#[attribute = "value"]`
 * `#[attribute(key = "value")]`
 * `#[attribute(value)]`
 
-Attributes can have multiple values and can be separated over multiple lines, too:
+속성은 여러 값을 가지고 있으며, 여러 줄에 걸쳐 분리할 수도 있습니다.
 
 ```rust,ignore
 #[attribute(value, value2)]

@@ -1,33 +1,30 @@
-# Bounds
+## 제약 조건
 
-When working with generics, the type parameters often must use traits as *bounds* to
-stipulate what functionality a type implements. For example, the following
-example uses the trait `Display` to print and so it requires `T` to be bound
-by `Display`; that is, `T` *must* implement `Display`.
+제네릭을 사용할 때, 유형 매개변수는 종종 *제약 조건*으로서 트레이트를 사용해야 합니다.
+제약 조건은 유형이 어떤 기능을 구현하는지 명시합니다. 예를 들어, 다음 예제는 `Display` 트레이트를 사용하여 출력하고 따라서 `T`가 `Display`에 의해 제약되어야 합니다.
+즉, `T`는 반드시 `Display`를 구현해야 합니다.
 
 ```rust,ignore
-// Define a function `printer` that takes a generic type `T` which
-// must implement trait `Display`.
+// `Display` 트레이트를 구현하는 유형 `T`를 받는 `printer` 함수 정의.
 fn printer<T: Display>(t: T) {
     println!("{}", t);
 }
 ```
 
-Bounding restricts the generic to types that conform to the bounds. That is:
+제약 조건은 제네릭을 구현하는 유형을 제한합니다. 즉,
 
 ```rust,ignore
 struct S<T: Display>(T);
 
-// Error! `Vec<T>` does not implement `Display`. This
-// specialization will fail.
+// `Display` 트레이트를 구현하지 않는 `Vec<T>`는 오류.
 let s = S(vec![1]);
 ```
 
-Another effect of bounding is that generic instances are allowed to access the 
-[methods] of traits specified in the bounds. For example:
+또 다른 효과로 제약 조건은 제네릭 인스턴스가 트레이트에 정의된 메서드에 액세스할 수 있도록 합니다.
+예를 들어,
 
 ```rust,editable
-// A trait which implements the print marker: `{:?}`.
+// `Debug` 트레이트를 구현하는 트레이트.
 use std::fmt::Debug;
 
 trait HasArea {
@@ -43,14 +40,12 @@ struct Rectangle { length: f64, height: f64 }
 #[allow(dead_code)]
 struct Triangle  { length: f64, height: f64 }
 
-// The generic `T` must implement `Debug`. Regardless
-// of the type, this will work properly.
+// `T`는 `Debug` 트레이트를 구현해야 합니다. 유형에 관계없이 이 코드는 제대로 작동합니다.
 fn print_debug<T: Debug>(t: &T) {
     println!("{:?}", t);
 }
 
-// `T` must implement `HasArea`. Any type which meets
-// the bound can access `HasArea`'s function `area`.
+// `T`는 `HasArea` 트레이트를 구현해야 합니다. 제약 조건을 충족하는 모든 유형은 `HasArea` 함수 `area`에 액세스할 수 있습니다.
 fn area<T: HasArea>(t: &T) -> f64 { t.area() }
 
 fn main() {
@@ -62,15 +57,14 @@ fn main() {
 
     //print_debug(&_triangle);
     //println!("Area: {}", area(&_triangle));
-    // ^ TODO: Try uncommenting these.
-    // | Error: Does not implement either `Debug` or `HasArea`. 
+    // ^ TODO: 위 코드를 주석을 해제해 보세요.
+    // | 오류: `Debug` 또는 `HasArea`를 구현하지 않습니다.
 }
 ```
 
-As an additional note, [`where`][where] clauses can also be used to apply bounds in
-some cases to be more expressive.
+추가적으로, [`where`][where] 절을 사용하여 더욱 표현력 있는 제약 조건을 적용할 수 있습니다.
 
-### See also:
+### 참조:
 
 [`std::fmt`][fmt], [`struct`s][structs], and [`trait`s][traits]
 

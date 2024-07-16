@@ -1,8 +1,6 @@
-# Pipes
+## 파이프
 
-The `std::Child` struct represents a running child process, and exposes the
-`stdin`, `stdout` and `stderr` handles for interaction with the underlying
-process via pipes.
+`std::Child` 구조체는 실행 중인 자식 프로세스를 나타내며, 파이프를 통해 기본 프로세스와의 상호 작용을 위한 `stdin`, `stdout` 및 `stderr` 핸들을 노출합니다.
 
 ```rust,ignore
 use std::io::prelude::*;
@@ -12,7 +10,7 @@ static PANGRAM: &'static str =
 "the quick brown fox jumps over the lazy dog\n";
 
 fn main() {
-    // Spawn the `wc` command
+    // `wc` 명령어를 시작
     let mut cmd = if cfg!(target_family = "windows") {
         let mut cmd = Command::new("powershell");
         cmd.arg("-Command").arg("$input | Measure-Object -Line -Word -Character");
@@ -28,22 +26,19 @@ fn main() {
         Ok(process) => process,
     };
 
-    // Write a string to the `stdin` of `wc`.
+    // `wc`의 `stdin`에 문자열을 쓰기
     //
-    // `stdin` has type `Option<ChildStdin>`, but since we know this instance
-    // must have one, we can directly `unwrap` it.
+    // `stdin`은 `Option<ChildStdin>` 유형을 가지지만, 이 인스턴스가 반드시 하나를 가지고 있음을 알고 있으므로 직접 `unwrap`할 수 있습니다.
     match process.stdin.unwrap().write_all(PANGRAM.as_bytes()) {
         Err(why) => panic!("couldn't write to wc stdin: {}", why),
         Ok(_) => println!("sent pangram to wc"),
     }
 
-    // Because `stdin` does not live after the above calls, it is `drop`ed,
-    // and the pipe is closed.
+    // `stdin`은 위의 호출 이후에 `drop`되며 파이프가 닫힙니다.
     //
-    // This is very important, otherwise `wc` wouldn't start processing the
-    // input we just sent.
+    // 이것은 매우 중요하며, 그렇지 않으면 `wc`가 우리가 보낸 입력을 처리하지 않을 것입니다.
 
-    // The `stdout` field also has type `Option<ChildStdout>` so must be unwrapped.
+    // `stdout` 필드도 `Option<ChildStdout>` 유형을 가지므로 `unwrap`해야 합니다.
     let mut s = String::new();
     match process.stdout.unwrap().read_to_string(&mut s) {
         Err(why) => panic!("couldn't read wc stdout: {}", why),

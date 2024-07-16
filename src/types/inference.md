@@ -1,28 +1,23 @@
-# Inference
+## 유도
 
-The type inference engine is pretty smart. It does more than looking at the
-type of the value expression
-during an initialization. It also looks at how the variable is used afterwards 
-to infer its type. Here's an advanced example of type inference:
+유형 추론 엔진은 매우 똑똑합니다. 초기화 중에 값 표현식의 유형을 살펴보는 것 이상을 합니다. 변수가 이후로 어떻게 사용되는지도 살펴보고 유형을 추론합니다. 다음은 유형 추론의 고급 예입니다.
 
 ```rust,editable
 fn main() {
-    // Because of the annotation, the compiler knows that `elem` has type u8.
+    // 어노테이션 때문에 컴파일러는 `elem`이 유형 `u8`임을 알고 있습니다.
     let elem = 5u8;
 
-    // Create an empty vector (a growable array).
+    // 비어있는 벡터(크기가 변하는 배열)를 만듭니다.
     let mut vec = Vec::new();
-    // At this point the compiler doesn't know the exact type of `vec`, it
-    // just knows that it's a vector of something (`Vec<_>`).
+    // 이 시점에서 컴파일러는 `vec`의 정확한 유형을 알지 못합니다. 단지 어떤 것의 벡터임을 알고 있습니다 (`Vec<_>`).
 
-    // Insert `elem` in the vector.
+    // `elem`을 벡터에 삽입합니다.
     vec.push(elem);
-    // Aha! Now the compiler knows that `vec` is a vector of `u8`s (`Vec<u8>`)
-    // TODO ^ Try commenting out the `vec.push(elem)` line
+    // 알았습니다! 이제 컴파일러는 `vec`이 `u8`의 벡터임을 알고 있습니다 (`Vec<u8>`)
+    // TODO ^ `vec.push(elem)` 줄을 주석 처리해 보세요
 
     println!("{:?}", vec);
 }
 ```
 
-No type annotation of variables was needed, the compiler is happy and so is the
-programmer!
+변수에 유형 어노테이션이 필요하지 않았습니다. 컴파일러는 기쁘고 프로그래머도 기쁩니다!

@@ -1,12 +1,11 @@
-# Crates
+## Crate
 
-A crate is a compilation unit in Rust. Whenever `rustc some_file.rs` is called,
-`some_file.rs` is treated as the *crate file*. If `some_file.rs` has `mod`
-declarations in it, then the contents of the module files would be inserted in
-places where `mod` declarations in the crate file are found, *before* running
-the compiler over it. In other words, modules do *not* get compiled
-individually, only crates get compiled.
+A crate는 Rust에서 컴파일 단위입니다. `rustc some_file.rs`가 호출될 때마다,
+`some_file.rs`는 *crate 파일*로 취급됩니다. `some_file.rs`에 `mod`
+declarations가 있으면 모듈 파일의 내용이 crate 파일의 `mod` 선언 부분에
+삽입되며, *컴파일 전*에 이루어집니다. 즉, 모듈은 개별적으로 컴파일되지 않고,
+단지 crate만이 컴파일됩니다.
 
-A crate can be compiled into a binary or into a library. By default, `rustc`
-will produce a binary from a crate. This behavior can be overridden by passing
-the `--crate-type` flag to `lib`.
+A crate는 바이너리 또는 라이브러리로 컴파일될 수 있습니다. 기본적으로 `rustc`는
+crate에서 바이너리를 생성합니다. 이 동작은 `--crate-type` 플래그를 `lib`로 전달하여
+초과할 수 있습니다.

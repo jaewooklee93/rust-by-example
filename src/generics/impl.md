@@ -1,16 +1,16 @@
-# Implementation
+## 구현
 
-Similar to functions, implementations require care to remain generic.
+함수와 마찬가지로, 구현 또한 일반화된 상태로 유지해야 합니다.
 
 ```rust
-struct S; // Concrete type `S`
-struct GenericVal<T>(T); // Generic type `GenericVal`
+struct S; // 구체적인 유형 `S`
+struct GenericVal<T>(T); // 일반적인 유형 `GenericVal`
 
-// impl of GenericVal where we explicitly specify type parameters:
-impl GenericVal<f32> {} // Specify `f32`
-impl GenericVal<S> {} // Specify `S` as defined above
+// `GenericVal`의 구현 (여기서 유형 매개변수를 명시적으로 지정)
+impl GenericVal<f32> {} // `f32` 지정
+impl GenericVal<S> {} // 위에서 정의된 `S` 지정
 
-// `<T>` Must precede the type to remain generic
+// `<T>`는 일반적인 유형을 유지하려면 유형 앞에 있어야 합니다
 impl<T> GenericVal<T> {}
 ```
 
@@ -23,14 +23,14 @@ struct GenVal<T> {
     gen_val: T,
 }
 
-// impl of Val
+// `Val`의 구현
 impl Val {
     fn value(&self) -> &f64 {
         &self.val
     }
 }
 
-// impl of GenVal for a generic type `T`
+// 일반적인 유형 `T`에 대한 `GenVal`의 구현
 impl<T> GenVal<T> {
     fn value(&self) -> &T {
         &self.gen_val
@@ -45,9 +45,9 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조:
 
-[functions returning references][fn], [`impl`][methods], and [`struct`][structs]
+[함수 반환 참조][fn], [`impl`][methods], [`struct`][structs]
 
 
 [fn]: ../scope/lifetime/fn.md

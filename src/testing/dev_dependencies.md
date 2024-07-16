@@ -1,20 +1,17 @@
-# Development dependencies
+## 개발 의존성
 
-Sometimes there is a need to have dependencies for tests (or examples,
-or benchmarks) only. Such dependencies are added to `Cargo.toml` in the
-`[dev-dependencies]` section. These dependencies are not propagated to other
-packages which depend on this package.
+때때로 테스트 (또는 예제 또는 벤치마크)에만 필요한 의존성이 있습니다. 이러한 의존성은 `Cargo.toml`의 `[dev-dependencies]` 섹션에 추가됩니다. 이러한 의존성은이 패키지에 의존하는 다른 패키지로 전파되지 않습니다.
 
-One such example is [`pretty_assertions`](https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html), which extends standard `assert_eq!` and `assert_ne!` macros, to provide colorful diff.  
-File `Cargo.toml`:
+예를 들어 [`pretty_assertions`](https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html)는 표준 `assert_eq!` 및 `assert_ne!` 매크로를 확장하여 색상이 있는 diff를 제공하는 것입니다. 
+`Cargo.toml` 파일:
 
 ```toml
-# standard crate data is left out
+# 기본 크레이트 데이터는 생략됩니다
 [dev-dependencies]
 pretty_assertions = "1"
 ```
 
-File `src/lib.rs`:
+`src/lib.rs` 파일:
 
 ```rust,ignore
 pub fn add(a: i32, b: i32) -> i32 {
@@ -24,7 +21,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pretty_assertions::assert_eq; // crate for test-only use. Cannot be used in non-test code.
+    use pretty_assertions::assert_eq; // 테스트 전용 사용 크레이트. 테스트 코드 이외의 코드에서 사용할 수 없습니다.
 
     #[test]
     fn test_add() {
@@ -33,7 +30,7 @@ mod tests {
 }
 ```
 
-## See Also
-[Cargo][cargo] docs on specifying dependencies.
+## 참조
+[Cargo][cargo] 의존성 지정에 대한 설명.
 
 [cargo]: http://doc.crates.io/specifying-dependencies.html

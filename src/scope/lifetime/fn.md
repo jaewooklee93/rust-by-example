@@ -1,43 +1,40 @@
-# Functions
+## 함수
 
-Ignoring [elision], function signatures with lifetimes have a few constraints: 
+[elision]을 무시하면, 라이프타임이 있는 함수 서명에는 몇 가지 제약 사항이 있습니다.
 
-* any reference *must* have an annotated lifetime.
-* any reference being returned *must* have the same lifetime as an input or
-be `static`.
+* 모든 참조는 반드시 해당 라이프타임이 지정되어야 합니다.
+* 반환되는 모든 참조는 입력 참조와 동일한 라이프타임이어야 하거나 `static`이어야 합니다.
 
-Additionally, note that returning references without input is banned if it
-would result in returning references to invalid data. The following example shows
-off some valid forms of functions with lifetimes:
+또한, 입력이 없는 참조를 반환하는 것은 유효하지 않은 데이터에 대한 참조를 반환하는 경우 금지됩니다. 다음 예제는 라이프타임이 있는 함수의 유효한 형태를 보여줍니다.
 
 ```rust,editable
-// One input reference with lifetime `'a` which must live
-// at least as long as the function.
+// 라이프타임 `'a`를 가진 하나의 입력 참조가 함수가 실행되는 동안
+// 적어도 동일한 시간 동안 유효해야 합니다.
 fn print_one<'a>(x: &'a i32) {
     println!("`print_one`: x is {}", x);
 }
 
-// Mutable references are possible with lifetimes as well.
+// 라이프타임과 함께 변경 가능한 참조도 가능합니다.
 fn add_one<'a>(x: &'a mut i32) {
     *x += 1;
 }
 
-// Multiple elements with different lifetimes. In this case, it
-// would be fine for both to have the same lifetime `'a`, but
-// in more complex cases, different lifetimes may be required.
+// 다른 라이프타임을 가진 여러 요소.
+// 이 경우 두 요소 모두 `'a`라는 동일한 라이프타임을 가질 수 있지만,
+// 더 복잡한 경우에는 다른 라이프타임이 필요할 수 있습니다.
 fn print_multi<'a, 'b>(x: &'a i32, y: &'b i32) {
     println!("`print_multi`: x is {}, y is {}", x, y);
 }
 
-// Returning references that have been passed in is acceptable.
-// However, the correct lifetime must be returned.
+// 전달된 참조를 반환하는 것은 허용됩니다.
+// 그러나 올바른 라이프타임이 반환되어야 합니다.
 fn pass_x<'a, 'b>(x: &'a i32, _: &'b i32) -> &'a i32 { x }
 
 //fn invalid_output<'a>() -> &'a String { &String::from("foo") }
-// The above is invalid: `'a` must live longer than the function.
-// Here, `&String::from("foo")` would create a `String`, followed by a
-// reference. Then the data is dropped upon exiting the scope, leaving
-// a reference to invalid data to be returned.
+// 위 코드는 유효하지 않습니다.: `'a`는 함수보다 더 오래 유효해야 합니다.
+// 여기서 `&String::from("foo")`는 `String`을 생성한 후 참조를 생성합니다.
+// 그런 다음 함수의 범위를 벗어나면 데이터가 삭제되고,
+// 유효하지 않은 데이터에 대한 참조가 반환됩니다.
 
 fn main() {
     let x = 7;
@@ -55,9 +52,9 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조:
 
-[Functions][fn]
+[함수][fn]
 
 [fn]: ../../fn.md
 

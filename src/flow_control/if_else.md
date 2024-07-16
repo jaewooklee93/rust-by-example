@@ -1,9 +1,6 @@
-# if/else
+## if/else
 
-Branching with `if`-`else` is similar to other languages. Unlike many of them,
-the boolean condition doesn't need to be surrounded by parentheses, and each
-condition is followed by a block. `if`-`else` conditionals are expressions,
-and, all branches must return the same type.
+`if`-`else`를 사용한 분기 처리 방식은 다른 언어와 유사합니다. 다만, 불린 조건을 괄호로 둘러싸는 것이 필요하지 않으며, 각 조건은 블록으로 이어집니다. `if`-`else` 조건문은 표현식이며, 모든 분기에서 동일한 유형을 반환해야 합니다.
 
 ```rust,editable
 fn main() {
@@ -21,16 +18,16 @@ fn main() {
         if n < 10 && n > -10 {
             println!(", and is a small number, increase ten-fold");
 
-            // This expression returns an `i32`.
+            // 이 표현식은 `i32`를 반환합니다.
             10 * n
         } else {
             println!(", and is a big number, halve the number");
 
-            // This expression must return an `i32` as well.
+            // 이 표현식 또한 `i32`를 반환해야 합니다.
             n / 2
-            // TODO ^ Try suppressing this expression with a semicolon.
+            // TODO ^ 세미콜론으로 이 표현식을 억제해 보세요.
         };
-    //   ^ Don't forget to put a semicolon here! All `let` bindings need it.
+    //   ^ 세미콜론을 잊지 마세요! 모든 `let` 바인딩은 세미콜론이 필요합니다.
 
     println!("{} -> {}", n, big_n);
 }

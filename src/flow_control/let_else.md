@@ -1,15 +1,13 @@
-# let-else
+## let-else
 
 
 > 🛈 stable since: rust 1.65
 >
-> 🛈 you can target specific edition by compiling like this
+> 🛈 특정 버전을 대상으로 컴파일하려면 다음과 같이 컴파일할 수 있습니다.
 > `rustc --edition=2021 main.rs`
 
 
-With `let`-`else`, a refutable pattern can match and bind variables
-in the surrounding scope like a normal `let`, or else diverge (e.g. `break`,
-`return`, `panic!`) when the pattern doesn't match.
+`let`-`else`를 사용하면 반증 가능한 패턴이 주변 범위에서 정상적인 `let`과 같이 매치되어 변수에 바인딩될 수 있습니다. 또는 패턴이 매치되지 않으면 `break`, `return`, `panic!`와 같은 방식으로 발산할 수 있습니다.
 
 ```rust
 use std::str::FromStr;
@@ -30,9 +28,7 @@ fn main() {
 }
 ```
 
-The scope of name bindings is the main thing that makes this different from
-`match` or `if let`-`else` expressions. You could previously approximate these
-patterns with an unfortunate bit of repetition and an outer `let`:
+변수 바인딩의 범위는 이것이 `match` 또는 `if let`-`else` 표현식과 다른 가장 중요한 점입니다. 이전에는 불행하게도 반복적인 코드 조각과 외부 `let`을 사용하여 이러한 패턴을 근사적으로 표현할 수 있었습니다.
 
 ```rust
 # use std::str::FromStr;
@@ -54,9 +50,9 @@ patterns with an unfortunate bit of repetition and an outer `let`:
 # assert_eq!(get_count_item("3 chairs"), (3, "chairs"));
 ```
 
-### See also:
+### 참조
 
-[option][option], [match][match], [if let][if_let] and the [let-else RFC][let_else_rfc].
+[option][option], [match][match], [if let][if_let] 및 [let-else RFC][let_else_rfc].
 
 
 [match]: ./match.md

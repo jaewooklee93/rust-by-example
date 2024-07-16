@@ -1,10 +1,10 @@
-# `Rc`
+## `Rc`
 
-When multiple ownership is needed, `Rc`(Reference Counting) can be used. `Rc` keeps track of the number of the references which means the number of owners of the value wrapped inside an `Rc`. 
+여러 소유권이 필요한 경우 `Rc`(참조 카운트)를 사용할 수 있습니다. `Rc`는 내부에 감싸진 값의 소유자 수를 추적하는 역할을 합니다. 
 
-Reference count of an `Rc` increases by 1 whenever an `Rc` is cloned, and decreases by 1 whenever one cloned `Rc` is dropped out of the scope. When an `Rc`'s reference count becomes zero (which means there are no remaining owners), both the `Rc` and the value are all dropped. 
+`Rc`의 참조 카운트는 `Rc`가 복사될 때마다 1 증가하고, 복사된 `Rc`가 스코프 밖으로 제거될 때마다 1 감소합니다. `Rc`의 참조 카운트가 0이 되면(즉, 더 이상 소유자가 없을 때) `Rc`와 내부 값 모두 해제됩니다. 
 
-Cloning an `Rc` never performs a deep copy. Cloning creates just another pointer to the wrapped value, and increments the count.
+`Rc`를 복사하는 것은 항상 깊은 복사를 수행하지 않습니다. 복사는 내부 값에 대한 또 다른 포인터를 생성하고 카운트를 증가시킵니다.
 
 ```rust,editable
 use std::rc::Rc;
@@ -12,43 +12,43 @@ use std::rc::Rc;
 fn main() {
     let rc_examples = "Rc examples".to_string();
     {
-        println!("--- rc_a is created ---");
+        println!("--- rc_a가 생성됨 ---");
         
         let rc_a: Rc<String> = Rc::new(rc_examples);
-        println!("Reference Count of rc_a: {}", Rc::strong_count(&rc_a));
+        println!("rc_a의 참조 카운트: {}", Rc::strong_count(&rc_a));
         
         {
-            println!("--- rc_a is cloned to rc_b ---");
+            println!("--- rc_a가 rc_b로 복사됨 ---");
             
             let rc_b: Rc<String> = Rc::clone(&rc_a);
-            println!("Reference Count of rc_b: {}", Rc::strong_count(&rc_b));
-            println!("Reference Count of rc_a: {}", Rc::strong_count(&rc_a));
+            println!("rc_b의 참조 카운트: {}", Rc::strong_count(&rc_b));
+            println!("rc_a의 참조 카운트: {}", Rc::strong_count(&rc_a));
             
-            // Two `Rc`s are equal if their inner values are equal
-            println!("rc_a and rc_b are equal: {}", rc_a.eq(&rc_b));
+            // 두 `Rc`는 내부 값이 같으면 같다고 간주됩니다
+            println!("rc_a와 rc_b가 같음: {}", rc_a.eq(&rc_b));
             
-            // We can use methods of a value directly
-            println!("Length of the value inside rc_a: {}", rc_a.len());
-            println!("Value of rc_b: {}", rc_b);
+            // `Rc` 내부 값의 메서드를 직접 사용할 수 있습니다
+            println!("rc_a 내부 값의 길이: {}", rc_a.len());
+            println!("rc_b의 값: {}", rc_b);
             
-            println!("--- rc_b is dropped out of scope ---");
+            println!("--- rc_b가 스코프 밖으로 제거됨 ---");
         }
         
-        println!("Reference Count of rc_a: {}", Rc::strong_count(&rc_a));
+        println!("rc_a의 참조 카운트: {}", Rc::strong_count(&rc_a));
         
-        println!("--- rc_a is dropped out of scope ---");
+        println!("--- rc_a가 스코프 밖으로 제거됨 ---");
     }
     
-    // Error! `rc_examples` already moved into `rc_a`
-    // And when `rc_a` is dropped, `rc_examples` is dropped together
+    // 오류! `rc_examples`는 이미 `rc_a`로 이동되었습니다
+    // 그리고 `rc_a`가 해제될 때 `rc_examples`도 함께 해제됩니다
     // println!("rc_examples: {}", rc_examples);
-    // TODO ^ Try uncommenting this line
+    // TODO ^ 이 줄을 주석 해제해 보세요
 }
 ```
 
-### See also:
+### 참조:
 
-[std::rc][1] and [std::sync::arc][2].
+[std::rc][1] 및 [std::sync::arc][2].
 
 [1]: https://doc.rust-lang.org/std/rc/index.html
 [2]: https://doc.rust-lang.org/std/sync/struct.Arc.html

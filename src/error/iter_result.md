@@ -1,6 +1,6 @@
-# Iterating over `Result`s
+## `Result`를 반복하는 방법
 
-An `Iter::map` operation might fail, for example:
+`Iter::map` 연산이 실패할 수 있습니다. 예를 들어,
 
 ```rust,editable
 fn main() {
@@ -13,11 +13,11 @@ fn main() {
 }
 ```
 
-Let's step through strategies for handling this.
+이를 처리하는 전략에 대해 살펴보겠습니다.
 
-## Ignore the failed items with `filter_map()`
+## `filter_map()`으로 실패한 항목 무시하기
 
-`filter_map` calls a function and filters out the results that are `None`.
+`filter_map`는 함수를 호출하고 `None`인 결과를 필터링합니다.
 
 ```rust,editable
 fn main() {
@@ -30,10 +30,9 @@ fn main() {
 }
 ```
 
-## Collect the failed items with `map_err()` and `filter_map()`
+## `map_err()`와 `filter_map()`으로 실패한 항목 수집하기
 
-`map_err` calls a function with the error, so by adding that to the previous
-`filter_map` solution we can save them off to the side while iterating.
+`map_err`는 오류와 함께 함수를 호출하므로, 이전의 `filter_map` 솔루션에 추가하여 측면에 저장할 수 있습니다.
 
 ```rust,editable
 fn main() {
@@ -49,11 +48,9 @@ fn main() {
 }
 ```
 
-## Fail the entire operation with `collect()`
+## `collect()`로 전체 작업 실패하기
 
-`Result` implements `FromIterator` so that a vector of results (`Vec<Result<T, E>>`)
-can be turned into a result with a vector (`Result<Vec<T>, E>`). Once an
-`Result::Err` is found, the iteration will terminate.
+`Result`는 `FromIterator`를 구현하여 결과의 벡터 (`Vec<Result<T, E>>`)를 결과로 변환할 수 있습니다 (`Result<Vec<T>, E>`). `Result::Err`가 발견되면 반복이 종료됩니다.
 
 ```rust,editable
 fn main() {
@@ -66,9 +63,9 @@ fn main() {
 }
 ```
 
-This same technique can be used with `Option`.
+이와 같은 기술은 `Option`과 함께 사용할 수 있습니다.
 
-## Collect all valid values and failures with `partition()`
+## `partition()`으로 모든 유효한 값과 오류 수집하기
 
 ```rust,editable
 fn main() {
@@ -82,8 +79,7 @@ fn main() {
 }
 ```
 
-When you look at the results, you'll note that everything is still wrapped in
-`Result`.  A little more boilerplate is needed for this.
+결과를 살펴보면 모든 것이 여전히 `Result`로 감싸여 있는 것을 알 수 있습니다. 이 방법에는 약간 더 많은 boilerplate 코드가 필요합니다.
 
 ```rust,editable
 fn main() {

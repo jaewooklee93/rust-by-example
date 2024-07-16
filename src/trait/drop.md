@@ -1,22 +1,17 @@
-# Drop
+## Drop
 
-The [`Drop`][Drop] trait only has one method: `drop`, which is called automatically 
-when an object goes out of scope. The main use of the `Drop` trait is to free the
-resources that the implementor instance owns.
+[`Drop`][Drop] 트레이트는 `drop` 메서드 하나만 가지고 있습니다. 이 메서드는 객체가 스코프 밖으로 나갈 때 자동으로 호출됩니다. `Drop` 트레이트의 주요 용도는 구현 객체가 소유한 리소스를 해제하는 것입니다.
 
-`Box`, `Vec`, `String`, `File`, and `Process` are some examples of types that
-implement the `Drop` trait to free resources. The `Drop` trait can also be
-manually implemented for any custom data type.
+`Box`, `Vec`, `String`, `File`, `Process`와 같은 유형은 리소스를 해제하기 위해 `Drop` 트레이트를 구현하는 예입니다. `Drop` 트레이트는 사용자 정의 데이터 유형에도 수동으로 구현할 수 있습니다.
 
-The following example adds a print to console to the `drop` function to announce
-when it is called.
+다음 예제는 `drop` 함수에 콘솔에 출력을 추가하여 호출될 때 알림을 표시합니다.
 
 ```rust,editable
 struct Droppable {
     name: &'static str,
 }
 
-// This trivial implementation of `drop` adds a print to console.
+// `drop`의 이 사소한 구현은 콘솔에 출력을 추가합니다.
 impl Drop for Droppable {
     fn drop(&mut self) {
         println!("> Dropping {}", self.name);
@@ -24,34 +19,4 @@ impl Drop for Droppable {
 }
 
 fn main() {
-    let _a = Droppable { name: "a" };
-
-    // block A
-    {
-        let _b = Droppable { name: "b" };
-
-        // block B
-        {
-            let _c = Droppable { name: "c" };
-            let _d = Droppable { name: "d" };
-
-            println!("Exiting block B");
-        }
-        println!("Just exited block B");
-
-        println!("Exiting block A");
-    }
-    println!("Just exited block A");
-
-    // Variable can be manually dropped using the `drop` function
-    drop(_a);
-    // TODO ^ Try commenting this line
-
-    println!("end of the main function");
-
-    // `_a` *won't* be `drop`ed again here, because it already has been
-    // (manually) `drop`ed
-}
-```
-
-[Drop]: https://doc.rust-lang.org/std/ops/trait.Drop.html
+    let _a = Droppable { name: "a

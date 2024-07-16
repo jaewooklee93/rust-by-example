@@ -1,48 +1,44 @@
-# RAII
+## RAII
 
-Variables in Rust do more than just hold data in the stack: they also *own*
-resources, e.g. `Box<T>` owns memory in the heap. Rust enforces [RAII][raii]
-(Resource Acquisition Is Initialization), so whenever an object goes out of
-scope, its destructor is called and its owned resources are freed.
+Rust에서 변수는 단순히 데이터를 저장하는 것 이상의 역할을 합니다. 변수는 *소유권*을 가지며, 예를 들어 `Box<T>`는 힙에 있는 메모리를 소유합니다. Rust는 [RAII](https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization) (자원획득은 초기화)를 강제하기 때문에, 객체의 범위가 끝날 때마다 소멸자(destructor)가 호출되어 소유한 자원이 해제됩니다.
 
-This behavior shields against *resource leak* bugs, so you'll never have to
-manually free memory or worry about memory leaks again! Here's a quick showcase:
+이러한 동작은 *자원 누수* 오류로부터 보호하여, 메모리 해제를 수동으로 처리하거나 메모리 누수에 대해 걱정할 필요가 없습니다! 간단한 예시를 살펴보겠습니다:
 
 ```rust,editable
 // raii.rs
 fn create_box() {
-    // Allocate an integer on the heap
+    // 힙에 정수를 할당
     let _box1 = Box::new(3i32);
 
-    // `_box1` is destroyed here, and memory gets freed
+    // `_box1`이 여기서 소멸되고 메모리가 해제됩니다
 }
 
 fn main() {
-    // Allocate an integer on the heap
+    // 힙에 정수를 할당
     let _box2 = Box::new(5i32);
 
-    // A nested scope:
+    // 중첩된 범위:
     {
-        // Allocate an integer on the heap
+        // 힙에 정수를 할당
         let _box3 = Box::new(4i32);
 
-        // `_box3` is destroyed here, and memory gets freed
+        // `_box3`이 여기서 소멸되고 메모리가 해제됩니다
     }
 
-    // Creating lots of boxes just for fun
-    // There's no need to manually free memory!
+    // 재밌게 많은 Box를 생성
+    // 메모리를 수동으로 해제할 필요가 없습니다!
     for _ in 0u32..1_000 {
         create_box();
     }
 
-    // `_box2` is destroyed here, and memory gets freed
+    // `_box2`이 여기서 소멸되고 메모리가 해제됩니다
 }
 ```
 
-Of course, we can double check for memory errors using [`valgrind`][valgrind]:
+물론, [`valgrind`](http://valgrind.org/info/)를 사용하여 메모리 오류를 확인할 수 있습니다:
 
 <!-- REUSE-IgnoreStart -->
-<!-- Prevent REUSE from parsing the copyright statement in the sample code -->
+<!-- REUSE가 샘플 코드의 저작권 표시를 분석하는 것을 방지 -->
 ```shell
 $ rustc raii.rs && valgrind ./raii
 ==26873== Memcheck, a memory error detector
@@ -62,17 +58,13 @@ $ rustc raii.rs && valgrind ./raii
 ```
 <!-- REUSE-IgnoreEnd -->
 
-No leaks here!
+누수 없음!
 
-## Destructor
+## 소멸자
 
-The notion of a destructor in Rust is provided through the [`Drop`] trait. The
-destructor is called when the resource goes out of scope. This trait is not
-required to be implemented for every type, only implement it for your type if
-you require its own destructor logic.
+Rust에서 소멸자의 개념은 [`Drop`] 트레이트를 통해 제공됩니다. 소멸자는 자원이 범위를 벗어날 때 호출됩니다. 이 트레이트는 모든 유형에 대해 구현되어 있는 것은 아니며, 자신의 소멸자 논리를 필요로 하는 경우에만 유형에 구현해야 합니다.
 
-Run the below example to see how the [`Drop`] trait works. When the variable in
-the `main` function goes out of scope the custom destructor will be invoked.
+아래 예제를 실행하면 [`Drop`] 트레이트가 어떻게 작동하는지 확인할 수 있습니다. `main` 함수의 변수가 범위를 벗어날 때 사용자 정의 소멸자가 호출됩니다.
 
 ```rust,editable
 struct ToDrop;
@@ -89,9 +81,9 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조
 
-[Box][box]
+[Box](../std/box.md)
 
 [raii]: https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
 [box]: ../std/box.md

@@ -1,12 +1,9 @@
-# Early returns
+## 조기 반환
 
-In the previous example, we explicitly handled the errors using combinators.
-Another way to deal with this case analysis is to use a combination of
-`match` statements and *early returns*.
+이전 예제에서는 조합자를 사용하여 오류를 명시적으로 처리했습니다.
+오류 분석을 다루는 또 다른 방법은 `match` 문과 *조기 반환*을 조합하는 것입니다.
 
-That is, we can simply stop executing the function and return the error if
-one occurs. For some, this form of code can be easier to both read and
-write. Consider this version of the previous example, rewritten using early returns:
+즉, 오류가 발생하면 함수 실행을 중단하고 오류를 반환할 수 있습니다. 어떤 사람들에게는 이러한 형태의 코드가 읽고 작성하기 쉬울 수 있습니다. 이전 예제의 이러한 버전을 조기 반환을 사용하여 작성한 예를 살펴보겠습니다.
 
 ```rust,editable
 use std::num::ParseIntError;
@@ -38,9 +35,6 @@ fn main() {
 }
 ```
 
-At this point, we've learned to explicitly handle errors using combinators
-and early returns. While we generally want to avoid panicking, explicitly
-handling all of our errors is cumbersome.
+이제 명시적으로 조합자와 조기 반환을 사용하여 오류를 처리하는 방법을 배웠습니다. 일반적으로는 `panic`을 피하고 싶지만, 모든 오류를 명시적으로 처리하는 것은 번거롭습니다.
 
-In the next section, we'll introduce `?` for the cases where we simply
-need to `unwrap` without possibly inducing `panic`.
+다음 섹션에서는 `?`를 소개하여 `unwrap`할 때 `panic`을 유발하지 않고도 사용할 수 있습니다.

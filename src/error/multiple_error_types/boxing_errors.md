@@ -1,18 +1,17 @@
-# `Box`ing errors
+## `Box` 에러 래핑
 
-A way to write simple code while preserving the original errors is to [`Box`][box]
-them.  The drawback is that the underlying error type is only known at runtime and not
-[statically determined][dynamic_dispatch].
+원래 오류를 유지하면서 간단한 코드를 작성하는 방법은 오류를 [`Box`][box] 에 래핑하는 것입니다.
+단점은 기본 오류 유형이 런타임에만 알려지며
+[static dispatch][dynamic_dispatch]가 아닌 것입니다.
 
-The stdlib helps in boxing our errors by having `Box` implement conversion from
-any type that implements the `Error` trait into the trait object `Box<Error>`,
-via [`From`][from].
+`stdlib`는 `Box`가 `Error` 트레이트를 구현하는 모든 유형에서 `Box<Error>` 트레이트 객체로 변환하는 데 도움을 줍니다.
+[`From`][from]를 통해.
 
 ```rust,editable
 use std::error;
 use std::fmt;
 
-// Change the alias to use `Box<dyn error::Error>`.
+// `Box<dyn error::Error>`를 사용하여 별칭 변경
 type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 #[derive(Debug, Clone)]
@@ -28,10 +27,10 @@ impl error::Error for EmptyVec {}
 
 fn double_first(vec: Vec<&str>) -> Result<i32> {
     vec.first()
-        .ok_or_else(|| EmptyVec.into()) // Converts to Box
+        .ok_or_else(|| EmptyVec.into()) // Box로 변환
         .and_then(|s| {
             s.parse::<i32>()
-                .map_err(|e| e.into()) // Converts to Box
+                .map_err(|e| e.into()) // Box로 변환
                 .map(|i| 2 * i)
         })
 }
@@ -54,9 +53,9 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조
 
-[Dynamic dispatch][dynamic_dispatch] and [`Error` trait][error]
+[Dynamic dispatch][dynamic_dispatch] 및 [`Error` 트레이트][error]
 
 [box]: https://doc.rust-lang.org/std/boxed/struct.Box.html
 [dynamic_dispatch]: https://doc.rust-lang.org/book/ch17-02-trait-objects.html#trait-objects-perform-dynamic-dispatch

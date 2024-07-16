@@ -1,32 +1,32 @@
-# Designators
+## 디자인레이터
 
-The arguments of a macro are prefixed by a dollar sign `$` and type annotated
-with a *designator*:
+맥로의 인수는 달러 기호 `$` 로 시작되고
+*디자인레이터*로 유형이 지정됩니다.
 
 ```rust,editable
 macro_rules! create_function {
-    // This macro takes an argument of designator `ident` and
-    // creates a function named `$func_name`.
-    // The `ident` designator is used for variable/function names.
+    // 이 맥로는 `ident` 디자인레이터를 사용하여 인수를 받고
+    // `$func_name`이라는 이름의 함수를 생성합니다.
+    // `ident` 디자인레이터는 변수/함수 이름에 사용됩니다.
     ($func_name:ident) => {
         fn $func_name() {
-            // The `stringify!` macro converts an `ident` into a string.
+            // `stringify!` 맥로는 `ident`를 문자열로 변환합니다.
             println!("You called {:?}()",
                      stringify!($func_name));
         }
     };
 }
 
-// Create functions named `foo` and `bar` with the above macro.
+// 위 맥로를 사용하여 `foo`와 `bar`라는 이름의 함수를 생성합니다.
 create_function!(foo);
 create_function!(bar);
 
 macro_rules! print_result {
-    // This macro takes an expression of type `expr` and prints
-    // it as a string along with its result.
-    // The `expr` designator is used for expressions.
+    // 이 맥로는 `expr` 유형의 표현식을 받고
+    // 그 표현식을 문자열로 출력합니다.
+    // `expr` 디자인레이터는 표현식에 사용됩니다.
     ($expression:expr) => {
-        // `stringify!` will convert the expression *as it is* into a string.
+        // `stringify!`는 표현식을 *그대로* 문자열로 변환합니다.
         println!("{:?} = {:?}",
                  stringify!($expression),
                  $expression);
@@ -39,7 +39,7 @@ fn main() {
 
     print_result!(1u32 + 1);
 
-    // Recall that blocks are expressions too!
+    // 블록도 표현식입니다!
     print_result!({
         let x = 1u32;
 
@@ -48,20 +48,20 @@ fn main() {
 }
 ```
 
-These are some of the available designators:
+다음은 사용 가능한 디자인레이터 일부입니다.
 
 * `block`
-* `expr` is used for expressions
-* `ident` is used for variable/function names
+* `expr`는 표현식에 사용됩니다
+* `ident`는 변수/함수 이름에 사용됩니다
 * `item`
-* `literal` is used for literal constants
-* `pat` (*pattern*)
+* `literal`는 상수에 사용됩니다
+* `pat` (*패턴*)
 * `path`
-* `stmt` (*statement*)
-* `tt` (*token tree*)
-* `ty` (*type*)
-* `vis` (*visibility qualifier*)
+* `stmt` (*문*)
+* `tt` (*토큰 트리*)
+* `ty` (*유형*)
+* `vis` (*시각적 자격*)
 
-For a complete list, see the [Rust Reference].
+더 자세한 내용은 [Rust 참조]를 참조하세요.
 
-[Rust Reference]: https://doc.rust-lang.org/reference/macros-by-example.html
+[Rust 참조]: https://doc.rust-lang.org/reference/macros-by-example.html

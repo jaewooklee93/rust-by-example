@@ -1,11 +1,10 @@
-# Playground
+## 놀이터
 
-The [Rust Playground](https://play.rust-lang.org/) is a way to experiment with
-Rust code through a web interface.
+[Rust 놀이터](https://play.rust-lang.org/)는 웹 인터페이스를 통해 Rust 코드를 실험하는 방법입니다.
 
-## Using it with `mdbook`
+## `mdbook`와의 사용
 
-In [`mdbook`][mdbook], you can make code examples playable and editable.
+[`mdbook`][mdbook]에서 코드 예제를 실행 가능하고 편집 가능하게 만들 수 있습니다.
 
 ```rust,editable
 fn main() {
@@ -13,31 +12,25 @@ fn main() {
 }
 ```
 
-This allows the reader to both run your code sample, but also modify and tweak
-it. The key here is the adding of the word `editable` to your codefence block
-separated by a comma.
+이렇게 하면 독자는 코드 샘플을 실행할 수 있을 뿐만 아니라 수정하고 조정할 수 있습니다. 여기서 중요한 것은 코드 블록에 `editable`라는 단어를 쉼표로 구분하여 추가하는 것입니다.
 
 ````markdown
 ```rust,editable
-//...place your code here
+//...코드를 여기에 넣으세요
 ```
 ````
 
-Additionally, you can add `ignore` if you want `mdbook` to skip your code when
-it builds and tests.
+또한, `mdbook`가 코드를 빌드하고 테스트할 때 건너뛰도록 하려면 `ignore`를 추가할 수 있습니다.
 
 ````markdown
 ```rust,editable,ignore
-//...place your code here
+//...코드를 여기에 넣으세요
 ```
 ````
 
-## Using it with docs
+## 문서와의 사용
 
-You may have noticed in some of the [official Rust docs][official-rust-docs] a
-button that says "Run", which opens the code sample up in a new tab in Rust
-Playground. This feature is enabled if you use the `#[doc]` attribute called
-[`html_playground_url`][html-playground-url].
+[공식 Rust 문서][official-rust-docs]에서 일부는 "실행"이라는 버튼이 있는데, 이 버튼을 누르면 Rust 놀이터에서 새 탭으로 코드 샘플이 열립니다. 이 기능은 `#[doc]` 속성인 [`html_playground_url`][html-playground-url]을 사용하면 활성화됩니다.
 
 ```
 #![doc(html_playground_url = "https://play.rust-lang.org/")]
@@ -46,11 +39,11 @@ Playground. This feature is enabled if you use the `#[doc]` attribute called
 //! ```
 ```
 
-### See also:
+### 참조
 
-- [The Rust Playground][rust-playground]
-- [The Rust Playground On Github][rust-playground-github]
-- [The rustdoc Book][rustdoc-book]
+- [Rust 놀이터][rust-playground]
+- [Rust 놀이터 GitHub][rust-playground-github]
+- [rustdoc 책][rustdoc-book]
 
 [rust-playground]: https://play.rust-lang.org/
 [rust-playground-github]: https://github.com/integer32llc/rust-playground/

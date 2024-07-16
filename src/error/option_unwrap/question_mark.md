@@ -1,21 +1,17 @@
-# Unpacking options with `?`
+## `?` 연산자로 Option 해체하기
 
-You can unpack `Option`s by using `match` statements, but it's often easier to
-use the `?` operator. If `x` is an `Option`, then evaluating `x?` will return
-the underlying value if `x` is `Some`, otherwise it will terminate whatever
-function is being executed and return `None`.
+`Option`을 해체하는 방법은 `match` 문을 사용하는 것이지만, `?` 연산자를 사용하는 것이 더 간편합니다. `x`가 `Option`이라면, `x?`를 평가하면 `x`가 `Some`이면 내부 값을 반환하고, `None`이면 현재 실행 중인 함수를 종료하고 `None`을 반환합니다.
 
 ```rust,editable
 fn next_birthday(current_age: Option<u8>) -> Option<String> {
-	// If `current_age` is `None`, this returns `None`.
-	// If `current_age` is `Some`, the inner `u8` value + 1
-    // gets assigned to `next_age`
+	// `current_age`가 `None`이면 이 함수는 `None`을 반환합니다.
+	// `current_age`가 `Some`이면 내부 `u8` 값 + 1이 `next_age`에 할당됩니다.
     let next_age: u8 = current_age? + 1;
-    Some(format!("Next year I will be {}", next_age))
+    Some(format!("다음 해에는 {}살이 될 거예요", next_age))
 }
 ```
 
-You can chain many `?`s together to make your code much more readable.
+여러 개의 `?`를 연속으로 사용하여 코드를 더 읽기 쉽게 만들 수 있습니다.
 
 ```rust,editable
 struct Person {
@@ -35,11 +31,10 @@ struct PhoneNumber {
 
 impl Person {
 
-    // Gets the area code of the phone number of the person's job, if it exists.
+    // 사람의 직장의 전화번호의 지역번호를 반환합니다. (만약 존재한다면)
     fn work_phone_area_code(&self) -> Option<u8> {
-        // This would need many nested `match` statements without the `?` operator.
-        // It would take a lot more code - try writing it yourself and see which
-        // is easier.
+        // `?` 연산자 없이 `match` 문을 사용하면 많은 중첩된 문이 필요합니다.
+        // 훨씬 더 많은 코드가 필요합니다. 직접 작성해보고 어떤 것이 더 쉬운지 확인해보세요.
         self.job?.phone_number?.area_code
     }
 }

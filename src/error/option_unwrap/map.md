@@ -1,16 +1,10 @@
-# Combinators: `map`
+## 조합자: `map`
 
-`match` is a valid method for handling `Option`s. However, you may 
-eventually find heavy usage tedious, especially with operations only valid 
-with an input. In these cases, [combinators][combinators] can be used to 
-manage control flow in a modular fashion.
+`match`는 `Option`을 처리하는 유효한 방법입니다. 그러나, 특히 입력만 유효한 작업을 수행할 때, `match`를 자주 사용하는 것은 지루해질 수 있습니다. 이러한 경우, [조합자][combinators]를 사용하여 제어 흐름을 모듈식으로 관리할 수 있습니다.
 
-`Option` has a built in method called `map()`, a combinator for the simple 
-mapping of `Some -> Some` and `None -> None`. Multiple `map()` calls can be 
-chained together for even more flexibility.
+`Option`은 `Some -> Some` 및 `None -> None`의 간단한 매핑을 위한 내장된 메서드인 `map()`을 가지고 있습니다. 여러 `map()` 호출을 체이닝하여 더 많은 유연성을 얻을 수 있습니다.
 
-In the following example, `process()` replaces all functions previous
-to it while staying compact.
+다음 예제에서는 `process()`가 이전 함수를 모두 대체하면서도 코드가 간결해집니다.
 
 ```rust,editable
 #![allow(dead_code)]
@@ -21,8 +15,8 @@ to it while staying compact.
 #[derive(Debug)] struct Chopped(Food);
 #[derive(Debug)] struct Cooked(Food);
 
-// Peeling food. If there isn't any, then return `None`.
-// Otherwise, return the peeled food.
+// 음식을 껍질째 벗기는 함수. 음식이 없으면 `None`을 반환합니다.
+// 그렇지 않으면 껍질째 벗긴 음식을 반환합니다.
 fn peel(food: Option<Food>) -> Option<Peeled> {
     match food {
         Some(food) => Some(Peeled(food)),
@@ -30,8 +24,8 @@ fn peel(food: Option<Food>) -> Option<Peeled> {
     }
 }
 
-// Chopping food. If there isn't any, then return `None`.
-// Otherwise, return the chopped food.
+// 음식을 다지는 함수. 음식이 없으면 `None`을 반환합니다.
+// 그렇지 않으면 다진 음식을 반환합니다.
 fn chop(peeled: Option<Peeled>) -> Option<Chopped> {
     match peeled {
         Some(Peeled(food)) => Some(Chopped(food)),
@@ -39,20 +33,20 @@ fn chop(peeled: Option<Peeled>) -> Option<Chopped> {
     }
 }
 
-// Cooking food. Here, we showcase `map()` instead of `match` for case handling.
+// 음식을 익히는 함수. 여기서는 `match` 대신 `map()`을 사용하여 경우 처리를 보여줍니다.
 fn cook(chopped: Option<Chopped>) -> Option<Cooked> {
     chopped.map(|Chopped(food)| Cooked(food))
 }
 
-// A function to peel, chop, and cook food all in sequence.
-// We chain multiple uses of `map()` to simplify the code.
+// 껍질을 벗기고 다지고 익히는 함수를 순차적으로 실행하는 함수.
+// `map()`의 여러 사용을 체이닝하여 코드를 간소화합니다.
 fn process(food: Option<Food>) -> Option<Cooked> {
     food.map(|f| Peeled(f))
         .map(|Peeled(f)| Chopped(f))
         .map(|Chopped(f)| Cooked(f))
 }
 
-// Check whether there's food or not before trying to eat it!
+// 음식이 있는지 확인한 후 먹으세요!
 fn eat(food: Option<Cooked>) {
     match food {
         Some(food) => println!("Mmm. I love {:?}", food),
@@ -67,7 +61,7 @@ fn main() {
 
     let cooked_apple = cook(chop(peel(apple)));
     let cooked_carrot = cook(chop(peel(carrot)));
-    // Let's try the simpler looking `process()` now.
+    // 간결하게 보이는 `process()`를 사용해 보겠습니다.
     let cooked_potato = process(potato);
 
     eat(cooked_apple);
@@ -76,9 +70,9 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조:
 
-[closures][closures], [`Option`][option], [`Option::map()`][map]
+[클로저][closures], [`Option`][option], [`Option::map()`][map]
 
 [combinators]: https://doc.rust-lang.org/reference/glossary.html#combinator
 [closures]: ../../fn/closures.md

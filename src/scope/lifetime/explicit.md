@@ -1,75 +1,61 @@
-# Explicit annotation
+## 명시적 언어 표시
 
-The borrow checker uses explicit lifetime annotations to determine
-how long references should be valid. In cases where lifetimes are not
-elided[^1], Rust requires explicit annotations to determine what the 
-lifetime of a reference should be. The syntax for explicitly annotating 
-a lifetime uses an apostrophe character as follows: 
+빌로우 체커는 명시적 라이프타임 언어 표시를 사용하여 참조가 얼마나 오래 유효해야 하는지 결정합니다. 라이프타임이 [숨김[^1]]되지 않는 경우, Rust는 참조의 라이프타임이 무엇이어야 하는지 결정하기 위해 명시적 언어 표시가 필요합니다. 명시적으로 라이프타임을 언어 표시하는 문법은 다음과 같이 쉼표 문자를 사용합니다.
 
 ```rust,ignore
 foo<'a>
-// `foo` has a lifetime parameter `'a`
+// `foo`는 라이프타임 매개변수 `'a`를 가지고 있습니다.
 ```
 
-Similar to [closures][anonymity], using lifetimes requires generics. 
-Additionally, this lifetime syntax indicates that the lifetime of `foo` 
-may not exceed that of `'a`. Explicit annotation of a type has the form 
-`&'a T` where `'a` has already been introduced.
+[폐쇄형 함수][무명성]와 마찬가지로, 라이프타임을 사용하려면 일반화가 필요합니다. 또한, 이 라이프타임 문법은 `foo`의 라이프타임이 `'a`보다 길 수 없음을 나타냅니다. 유형의 명시적 언어 표시는 `'a`가 이미 소개된 경우 `&'a T` 형태입니다.
 
-In cases with multiple lifetimes, the syntax is similar:
+여러 라이프타임이 있는 경우 문법은 다음과 같습니다.
 
 ```rust,ignore
 foo<'a, 'b>
-// `foo` has lifetime parameters `'a` and `'b`
+// `foo`는 라이프타임 매개변수 `'a`와 `'b`를 가지고 있습니다.
 ```
 
-In this case, the lifetime of `foo` cannot exceed that of either `'a` *or* `'b`.
+이 경우 `foo`의 라이프타임은 `'a` 또는 `'b` 중 어느 하나보다 길 수 없습니다.
 
-See the following example for explicit lifetime annotation in use:
+명시적 라이프타임 언어 표시를 사용하는 예제를 아래에 보여줍니다.
 
 ```rust,editable,ignore,mdbook-runnable
-// `print_refs` takes two references to `i32` which have different
-// lifetimes `'a` and `'b`. These two lifetimes must both be at
-// least as long as the function `print_refs`.
+// `print_refs`는 `i32`에 대한 두 개의 참조를 받아들이는데, 이 참조는 각각 `'a`와 `'b`라는 다른 라이프타임을 가지고 있습니다. 이 두 라이프타임은 모두 함수 `print_refs`보다 짧을 수 없습니다.
 fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
     println!("x is {} and y is {}", x, y);
 }
 
-// A function which takes no arguments, but has a lifetime parameter `'a`.
+// 인수를 받지 않는 함수이지만 라이프타임 매개변수 `'a`를 가지고 있습니다.
 fn failed_borrow<'a>() {
     let _x = 12;
 
-    // ERROR: `_x` does not live long enough
+    // ERROR: `_x`는 충분히 오래 살지 않습니다.
     let _y: &'a i32 = &_x;
-    // Attempting to use the lifetime `'a` as an explicit type annotation 
-    // inside the function will fail because the lifetime of `&_x` is shorter
-    // than that of `_y`. A short lifetime cannot be coerced into a longer one.
+    // 함수 내부에서 `'a`를 명시적 유형 언어 표시로 사용하려고 시도하면 오류가 발생합니다. `&_x`의 라이프타임이 `_y`보다 짧기 때문입니다. 짧은 라이프타임은 더 긴 라이프타임으로 강제 변환할 수 없습니다.
 }
 
 fn main() {
-    // Create variables to be borrowed below.
+    // 참조될 변수를 생성합니다.
     let (four, nine) = (4, 9);
     
-    // Borrows (`&`) of both variables are passed into the function.
+    // 두 변수의 참조 (`&`)가 함수로 전달됩니다.
     print_refs(&four, &nine);
-    // Any input which is borrowed must outlive the borrower. 
-    // In other words, the lifetime of `four` and `nine` must 
-    // be longer than that of `print_refs`.
+    // 참조되는 모든 입력은 대출자보다 오래 유지되어야 합니다. 즉, `four`와 `nine`의 라이프타임은 `print_refs`보다 길어야 합니다.
     
     failed_borrow();
-    // `failed_borrow` contains no references to force `'a` to be 
-    // longer than the lifetime of the function, but `'a` is longer.
-    // Because the lifetime is never constrained, it defaults to `'static`.
+    // `failed_borrow`는 `'a`를 강제로 더 긴 라이프타임으로 만드는 참조가 없지만, `'a`는 더 길습니다.
+    // 라이프타임이 결코 제약되지 않기 때문에 기본적으로 `'static`이 됩니다.
 }
 ```
 
-[^1]: [elision] implicitly annotates lifetimes and so is different.
+[^1]: [숨김]은 라이프타임을 암시적으로 언어 표시하므로 다릅니다.
 
-### See also:
+### 참조:
 
-[generics][generics] and [closures][closures]
+[일반화][일반화] 및 [폐쇄형 함수][폐쇄형 함수]
 
-[anonymity]: ../../fn/closures/anonymity.md
-[closures]: ../../fn/closures.md
-[elision]: elision.md
-[generics]: ../../generics.md
+[무명성]: ../../fn/closures/anonymity.md
+[폐쇄형 함수]: ../../fn/closures.md
+[숨김]: elision.md
+[일반화]: ../../generics.md

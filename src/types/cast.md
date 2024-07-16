@@ -1,89 +1,86 @@
-# Casting
+## 형변환
 
-Rust provides no implicit type conversion (coercion) between primitive types.
-But, explicit type conversion (casting) can be performed using the `as` keyword.
+Rust는 기본형 유형 간에 암시적 형변환(coercion)을 제공하지 않습니다.
+하지만, `as` 키워드를 사용하여 명시적 형변환(casting)을 수행할 수 있습니다.
 
-Rules for converting between integral types follow C conventions generally,
-except in cases where C has undefined behavior. The behavior of all casts
-between integral types is well defined in Rust.
+정수 유형 간 형변환 규칙은 일반적으로 C의 규칙을 따르지만, C에서 정의되지 않은 동작이 있는 경우가 있습니다. Rust에서 모든 형변환의 동작은 명확하게 정의되어 있습니다.
 
 ```rust,editable,ignore,mdbook-runnable
-// Suppress all warnings from casts which overflow.
+// 모든 형변환으로 인한 오류를 무시합니다.
 #![allow(overflowing_literals)]
 
 fn main() {
     let decimal = 65.4321_f32;
 
-    // Error! No implicit conversion
+    // 오류! 암시적 형변환이 없습니다
     let integer: u8 = decimal;
-    // FIXME ^ Comment out this line
+    // FIXME ^ 이 줄을 주석 처리하세요
 
-    // Explicit conversion
+    // 명시적 형변환
     let integer = decimal as u8;
     let character = integer as char;
 
-    // Error! There are limitations in conversion rules.
-    // A float cannot be directly converted to a char.
+    // 오류! 형변환 규칙에 제한이 있습니다.
+    // 부동 소수점을 직접 문자로 변환할 수 없습니다.
     let character = decimal as char;
-    // FIXME ^ Comment out this line
+    // FIXME ^ 이 줄을 주석 처리하세요
 
     println!("Casting: {} -> {} -> {}", decimal, integer, character);
 
-    // when casting any value to an unsigned type, T,
-    // T::MAX + 1 is added or subtracted until the value
-    // fits into the new type
+    // 어떤 값을 무符号 유형 T로 형변환할 때,
+    // T::MAX + 1이 더하거나 빼서 값이
+    // 새 유형에 맞게 변환됩니다
 
-    // 1000 already fits in a u16
+    // 1000은 이미 u16에 들어갑니다
     println!("1000 as a u16 is: {}", 1000 as u16);
 
     // 1000 - 256 - 256 - 256 = 232
-    // Under the hood, the first 8 least significant bits (LSB) are kept,
-    // while the rest towards the most significant bit (MSB) get truncated.
+    // 맨 뒤에서부터 가장 중요한 비트(MSB)까지 잘라내고,
+    // 앞 8비트(LSB)만 유지됩니다.
     println!("1000 as a u8 is : {}", 1000 as u8);
     // -1 + 256 = 255
     println!("  -1 as a u8 is : {}", (-1i8) as u8);
 
-    // For positive numbers, this is the same as the modulus
+    // 긍정적인 숫자의 경우, 이것은 modulus 연산과 동일합니다.
     println!("1000 mod 256 is : {}", 1000 % 256);
 
-    // When casting to a signed type, the (bitwise) result is the same as
-    // first casting to the corresponding unsigned type. If the most significant
-    // bit of that value is 1, then the value is negative.
+    // 유형으로 형변환할 때, (비트 연산) 결과는
+    // 먼저 해당하는 무符号 유형으로 형변환한 것과 동일합니다. 해당 값의 가장 중요한 비트가 1이면 값이 음수입니다.
 
-    // Unless it already fits, of course.
+    // 이미 들어가는 경우를 제외하고는
     println!(" 128 as a i16 is: {}", 128 as i16);
 
-    // In boundary case 128 value in 8-bit two's complement representation is -128
+    // 경계 조건에서 128 값은 8비트 두의 보수 표현에서 -128입니다
     println!(" 128 as a i8 is : {}", 128 as i8);
 
-    // repeating the example above
+    // 위의 예시를 반복
     // 1000 as u8 -> 232
     println!("1000 as a u8 is : {}", 1000 as u8);
-    // and the value of 232 in 8-bit two's complement representation is -24
+    // 그리고 232 값은 8비트 두의 보수 표현에서 -24입니다
     println!(" 232 as a i8 is : {}", 232 as i8);
 
-    // Since Rust 1.45, the `as` keyword performs a *saturating cast*
-    // when casting from float to int. If the floating point value exceeds
-    // the upper bound or is less than the lower bound, the returned value
-    // will be equal to the bound crossed.
+    // Rust 1.45부터 `as` 키워드는 부동 소수점을 정수로 형변환할 때 *포화 형변환*을 수행합니다.
+    // 부동 소수점 값이 상한 값을 초과하거나 하한 값보다 작으면, 반환되는 값은 넘어간 경계 값이 됩니다.
 
-    // 300.0 as u8 is 255
+    // 300.0 as u8은 255입니다
     println!(" 300.0 as u8 is : {}", 300.0_f32 as u8);
-    // -100.0 as u8 is 0
+    // -100.0 as u8은 0입니다
     println!("-100.0 as u8 is : {}", -100.0_f32 as u8);
-    // nan as u8 is 0
+    // nan as u8은 0입니다
     println!("   nan as u8 is : {}", f32::NAN as u8);
 
-    // This behavior incurs a small runtime cost and can be avoided
-    // with unsafe methods, however the results might overflow and
-    // return **unsound values**. Use these methods wisely:
+    // 이러한 동작은 작은 실행 시간 비용을 발생시키며, `unsafe` 메서드를 사용하여 피할 수 있습니다. 그러나 결과는 오버플로우를 일으켜
+    // **잘못된 값**을 반환할 수 있습니다. 이러한 메서드를 신중하게 사용하십시오:
     unsafe {
-        // 300.0 as u8 is 44
+        // 300.0 as u8은 44입니다
         println!(" 300.0 as u8 is : {}", 300.0_f32.to_int_unchecked::<u8>());
-        // -100.0 as u8 is 156
-        println!("-100.0 as u8 is : {}", (-100.0_f32).to_int_unchecked::<u8>());
-        // nan as u8 is 0
-        println!("   nan as u8 is : {}", f32::NAN.to_int_unchecked::<u8>());
-    }
+        // -100.0 as u8은 156입니다
+```rust
+fn main() {
+    println!("100 as u8 is : {}", 100 as u8);
+    println!("100.0 as u8 is : {}", 100.0_f32.to_int_unchecked::<u8>());
+    println!("-100.0 as u8 is : {}", (-100.0_f32).to_int_unchecked::<u8>());
+    // nan as u8 is 0
+    println!("   nan as u8 is : {}", f32::NAN.to_int_unchecked::<u8>());
 }
 ```

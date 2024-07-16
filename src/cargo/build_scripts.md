@@ -1,12 +1,8 @@
-# Build Scripts
+## 빌드 스크립트
 
-Sometimes a normal build from `cargo` is not enough. Perhaps your crate needs
-some pre-requisites before `cargo` will successfully compile, things like code
-generation, or some native code that needs to be compiled. To solve this problem
-we have build scripts that Cargo can run.
+때때로 `cargo`로부터의 일반적인 빌드만으로는 충분하지 않습니다. 아마도 빌드가 성공적으로 컴파일되기 전에 `cargo`가 필요로 하는 사전 요구 사항이 있을 수 있습니다. 코드 생성이나 컴파일해야 하는 네이티브 코드와 같은 것들입니다. 이 문제를 해결하기 위해 Cargo는 빌드 스크립트를 사용할 수 있습니다.
 
-To add a build script to your package it can either be specified in the
-`Cargo.toml` as follows:
+패키지에 빌드 스크립트를 추가하려면 다음과 같이 `Cargo.toml`에 지정할 수 있습니다.
 
 ```toml
 [package]
@@ -14,26 +10,18 @@ To add a build script to your package it can either be specified in the
 build = "build.rs"
 ```
 
-Otherwise Cargo will look for a `build.rs` file in the project directory by
-default.
+그렇지 않으면 Cargo는 프로젝트 디렉토리에서 기본적으로 `build.rs` 파일을 찾습니다.
 
-## How to use a build script
+## 빌드 스크립트 사용 방법
 
-The build script is simply another Rust file that will be compiled and invoked
-prior to compiling anything else in the package. Hence it can be used to fulfill
-pre-requisites of your crate.
+빌드 스크립트는 패키지의 다른 모든 것을 컴파일하기 전에 컴파일되고 호출되는 또 다른 Rust 파일입니다. 따라서 패키지의 사전 요구 사항을 충족하는 데 사용할 수 있습니다.
 
-Cargo provides the script with inputs via environment variables [specified
-here] that can be used.
+Cargo는 환경 변수를 통해 스크립트에 입력을 제공합니다. [여기서 지정됨]
 
-The script provides output via stdout. All lines printed are written to
-`target/debug/build/<pkg>/output`. Further, lines prefixed with `cargo:` will be
-interpreted by Cargo directly and hence can be used to define parameters for the
-package's compilation.
+스크립트는 stdout를 통해 출력을 제공합니다. 출력된 모든 줄은 `target/debug/build/<pkg>/output`로 작성됩니다. 또한 `cargo:`로 시작하는 줄은 Cargo에서 직접 해석되므로 패키지의 컴파일을 위한 매개변수를 정의하는 데 사용할 수 있습니다.
 
-For further specification and examples have a read of the
-[Cargo specification][cargo_specification].
+더 자세한 내용과 예제는 [Cargo 명세서][cargo_specification]를 참조하십시오.
 
-[specified here]: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
+[여기서 지정됨]: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
 
 [cargo_specification]: https://doc.rust-lang.org/cargo/reference/build-scripts.html

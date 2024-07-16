@@ -1,49 +1,46 @@
-# Hello World
+## 안녕 세상
 
-This is the source code of the traditional Hello World program.
+이것은 전통적인 안녕 세상 프로그램의 소스 코드입니다.
 
 ```rust,editable
-// This is a comment, and is ignored by the compiler.
-// You can test this code by clicking the "Run" button over there ->
-// or if you prefer to use your keyboard, you can use the "Ctrl + Enter"
-// shortcut.
+// 이것은 주석이며, 컴파일러에서 무시됩니다.
+// "실행" 버튼을 클릭하여 이 코드를 테스트할 수 있습니다 ->
+// 또는 키보드를 사용하는 것을 선호하는 경우, "Ctrl + Enter" 단축키를 사용할 수 있습니다.
 
-// This code is editable, feel free to hack it!
-// You can always return to the original code by clicking the "Reset" button ->
+// 이 코드는 편집 가능합니다. 자유롭게 해킹해보세요!
+// "재설정" 버튼을 클릭하여 원래 코드로 돌아갈 수 있습니다 ->
 
-// This is the main function.
+// 이것은 메인 함수입니다.
 fn main() {
-    // Statements here are executed when the compiled binary is called.
+    // 컴파일된 바이너리가 호출될 때 실행되는 문장입니다.
 
-    // Print text to the console.
-    println!("Hello World!");
+    // 콘솔에 텍스트를 출력합니다.
+    println!("안녕 세상!");
 }
 ```
 
-`println!` is a [*macro*][macros] that prints text to the
-console.
+`println!`은 콘솔에 텍스트를 출력하는 [*메이커*][메이커]입니다.
 
-A binary can be generated using the Rust compiler: `rustc`.
+`rustc`라는 Rust 컴파일러를 사용하여 바이너리를 생성할 수 있습니다.
 
 ```bash
 $ rustc hello.rs
 ```
 
-`rustc` will produce a `hello` binary that can be executed.
+`rustc`는 `hello` 바이너리를 생성하여 실행할 수 있습니다.
 
 ```bash
 $ ./hello
-Hello World!
+안녕 세상!
 ```
 
-### Activity
+### 활동
 
-Click 'Run' above to see the expected output. Next, add a new
-line with a second `println!` macro so that the output shows:
+위의 '실행' 버튼을 클릭하여 예상 출력을 확인하세요. 다음으로, 두 번째 `println!` 메이커를 추가하여 출력이 다음과 같이 표시되도록 합니다.
 
 ```text
-Hello World!
-I'm a Rustacean!
+안녕 세상!
+저는 Rustacean입니다!
 ```
 
-[macros]: macros.md
+[메이커]: macros.md

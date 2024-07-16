@@ -1,58 +1,51 @@
-# Static
+## 정적
 
-Rust has a few reserved lifetime names. One of those is `'static`. You
-might encounter it in two situations:
+Rust에는 몇 가지 예약된 라이프타임 이름이 있습니다. 그 중 하나는 `'static`입니다. 이를 두 가지 상황에서 마주칠 수 있습니다.
 
 ```rust, editable
-// A reference with 'static lifetime:
+// 'static 라이프타임을 가진 참조:
 let s: &'static str = "hello world";
 
-// 'static as part of a trait bound:
+// trait bound의 일부로서 'static:
 fn generic<T>(x: T) where T: 'static {}
 ```
 
-Both are related but subtly different and this is a common source for
-confusion when learning Rust. Here are some examples for each situation:
+두 가지 모두 관련이 있지만 미세하게 다르며, Rust를 배우는 동안 흔한 혼란의 원천입니다. 각 상황에 대한 몇 가지 예를 살펴보겠습니다.
 
-## Reference lifetime
+## 참조 라이프타임
 
-As a reference lifetime `'static` indicates that the data pointed to by
-the reference lives for the remaining lifetime of the running program.
-It can still be coerced to a shorter lifetime.
+`'static` 참조 라이프타임으로서, 해당 참조가 가리키는 데이터가 프로그램 실행이 끝날 때까지 유효합니다. 여전히 더 짧은 라이프타임으로 강제 변환될 수 있습니다.
 
-There are two common ways to make a variable with `'static` lifetime, and both
-are stored in the read-only memory of the binary:
+`'static` 라이프타임을 가진 변수를 만드는 두 가지 일반적인 방법은 모두 바이너리의 읽기 전용 메모리에 저장됩니다.
 
-* Make a constant with the `static` declaration.
-* Make a `string` literal which has type: `&'static str`.
+* `static` 선언을 사용하여 상수를 만듭니다.
+* `string` 리터럴을 만듭니다. 그 유형은 `&'static str`입니다.
 
-See the following example for a display of each method:
+각 방법을 보여주는 예제를 아래에 보여줍니다.
 
-```rust,editable
-// Make a constant with `'static` lifetime.
+```rust, editable
+// `static` 선언을 사용하여 상수를 만듭니다.
 static NUM: i32 = 18;
 
-// Returns a reference to `NUM` where its `'static`
-// lifetime is coerced to that of the input argument.
+// `'static` 라이프타임을 가진 `NUM`를 입력 인수의 라이프타임으로 강제 변환합니다.
 fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
     &NUM
 }
 
 fn main() {
     {
-        // Make a `string` literal and print it:
+        // `string` 리터럴을 만듭니다. 그리고 출력합니다.
         let static_string = "I'm in read-only memory";
         println!("static_string: {}", static_string);
 
-        // When `static_string` goes out of scope, the reference
-        // can no longer be used, but the data remains in the binary.
+        // `static_string`가 범위를 벗어날 때 참조를 더 이상 사용할 수 없지만 데이터는 바이너리에 남습니다.
     }
 
     {
-        // Make an integer to use for `coerce_static`:
+        // `coerce_static`을 사용하기 위한 정수를 만듭니다.
         let lifetime_num = 9;
 
-        // Coerce `NUM` to lifetime of `lifetime_num`:
+        // `lifetime_num`의 라이프타임으로 `NUM`을 강제 변환합니다.
         let coerced_static = coerce_static(&lifetime_num);
 
         println!("coerced_static: {}", coerced_static);
@@ -62,14 +55,9 @@ fn main() {
 }
 ```
 
-Since `'static` references only need to be valid for the _remainder_ of
-a program's life, they can be created while the program is executed. Just to
-demonstrate, the below example uses
-[`Box::leak`](https://doc.rust-lang.org/std/boxed/struct.Box.html#method.leak)
-to dynamically create `'static` references. In that case it definitely doesn't
-live for the entire duration, but only for the leaking point onward.
+`'static` 참조는 프로그램의 _나머지_ 기간 동안 유효해야 하므로, 프로그램 실행 중에 생성할 수 있습니다. 단지 시연하기 위해 아래 예제는 [`Box::leak`](https://doc.rust-lang.org/std/boxed/struct.Box.html#method.leak)을 사용하여 동적으로 `'static` 참조를 생성합니다. 그 경우 프로그램 전체 기간 동안 유효하지 않지만, 누출 지점 이후로는 유효합니다.
 
-```rust,editable,compile_fail
+```rust, editable, compile_fail
 extern crate rand;
 use rand::Fill;
 
@@ -89,15 +77,11 @@ fn main() {
 
 ## Trait bound
 
-As a trait bound, it means the type does not contain any non-static
-references. Eg. the receiver can hold on to the type for as long as
-they want and it will never become invalid until they drop it.
+Trait bound로서, 유형에는 정적 참조가 포함되어 있지 않습니다. 예를 들어, 수신자는 유형을 원하는 만큼 오래 유지할 수 있으며, 그들이 해제할 때까지 유효하지 않아집니다.
 
-It's important to understand this means that any owned data always passes
-a `'static` lifetime bound, but a reference to that owned data generally
-does not:
+이것은 소유된 데이터는 항상 `'static` 라이프타임 bound를 통과한다는 것을 의미하지만, 소유된 데이터에 대한 참조는 일반적으로 `'static`가 아님을 의미합니다.
 
-```rust,editable,compile_fail
+```rust, editable, compile_fail
 use std::fmt::Debug;
 
 fn print_it( input: impl Debug + 'static ) {
@@ -105,31 +89,31 @@ fn print_it( input: impl Debug + 'static ) {
 }
 
 fn main() {
-    // i is owned and contains no references, thus it's 'static:
+    // i는 소유되고 참조를 포함하지 않으므로 'static입니다:
     let i = 5;
     print_it(i);
 
-    // oops, &i only has the lifetime defined by the scope of
-    // main(), so it's not 'static:
+    // oops, &i는 main()의 범위에서만 정의된 라이프타임을 가지므로 'static가 아닙니다:
     print_it(&i);
 }
 ```
-The compiler will tell you:
+
+컴파일러는 다음과 같은 오류 메시지를 표시합니다.
 ```ignore
 error[E0597]: `i` does not live long enough
   --> src/lib.rs:15:15
    |
-15 |     print_it(&i);
+```15 |     print_it(&i);
    |     ---------^^--
    |     |         |
-   |     |         borrowed value does not live long enough
-   |     argument requires that `i` is borrowed for `'static`
+   |     |         'i'가 충분히 오래 살지 않아서 대여된 값이 아직 유효하지 않음
+   |     인수는 `i`가 `'static` 동안 대여되어야 함
 16 | }
-   | - `i` dropped here while still borrowed
+   | - `i`가 여전히 대여 중인 상태에서 여기서 삭제됨
 ```
 
-### See also:
+### 참조:
 
-[`'static` constants][static_const]
+[`'static` 상수][static_const]
 
 [static_const]: ../../custom_types/constants.md

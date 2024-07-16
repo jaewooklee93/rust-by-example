@@ -1,11 +1,10 @@
-# File I/O
+## 파일 I/O
 
-The `File` struct represents a file that has been opened (it wraps a file
-descriptor), and gives read and/or write access to the underlying file.
+`File` 구조체는 열린 파일을 나타내며 (파일 디스크립터를 감싸고 있으며),
+기본 파일의 읽기 및/또는 쓰기 액세스를 제공합니다.
 
-Since many things can go wrong when doing file I/O, all the `File` methods
-return the `io::Result<T>` type, which is an alias for `Result<T, io::Error>`.
+파일 I/O를 수행할 때 많은 일이 잘못될 수 있기 때문에 모든 `File` 메서드는
+`io::Result<T>` 유형을 반환합니다. 이는 `Result<T, io::Error>`의 별칭입니다.
 
-This makes the failure of all I/O operations *explicit*. Thanks to this, the
-programmer can see all the failure paths, and is encouraged to handle them in
-a proactive manner.
+이를 통해 모든 I/O 작업의 실패가 *명시적으로* 표시됩니다. 이 덕분에
+프로그램자는 모든 실패 경로를 볼 수 있으며, 이를 적극적으로 처리하도록 장려됩니다.

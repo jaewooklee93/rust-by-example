@@ -1,51 +1,46 @@
-# Borrowing
+## 참조
 
-Most of the time, we'd like to access data without taking ownership over
-it. To accomplish this, Rust uses a *borrowing* mechanism. Instead of
-passing objects by value (`T`), objects can be passed by reference (`&T`).
+대부분의 경우, 데이터에 대한 소유권을 획득하지 않고 데이터에 액세스하고 싶습니다. 이를 위해 Rust는 *참조* 메커니즘을 사용합니다. 객체를 값으로 전달하는 대신 (`T`), 객체를 참조로 전달할 수 있습니다 (`&T`).
 
-The compiler statically guarantees (via its borrow checker) that references 
-*always* point to valid objects. That is, while references to an object
-exist, the object cannot be destroyed.
+컴파일러는 (빌드 체커를 통해) 참조가 *항상* 유효한 객체를 가리키도록 정적으로 보장합니다. 즉, 객체에 대한 참조가 존재하는 동안 객체는 삭제될 수 없습니다.
 
 ```rust,editable,ignore,mdbook-runnable
-// This function takes ownership of a box and destroys it
+// 이 함수는 박스를 소유하고 파괴합니다
 fn eat_box_i32(boxed_i32: Box<i32>) {
-    println!("Destroying box that contains {}", boxed_i32);
+    println!("박스를 파괴합니다: {}", boxed_i32);
 }
 
-// This function borrows an i32
+// 이 함수는 i32를 참조합니다
 fn borrow_i32(borrowed_i32: &i32) {
-    println!("This int is: {}", borrowed_i32);
+    println!("이 정수는: {}", borrowed_i32);
 }
 
 fn main() {
-    // Create a boxed i32 in the heap, and a i32 on the stack
-    // Remember: numbers can have arbitrary underscores added for readability
-    // 5_i32 is the same as 5i32
+    // 힙에 박스 i32를 생성하고 스택에 i32를 생성합니다
+    // 기억하세요: 숫자에 임의의 언더스코어를 추가하여 읽기 쉽게 만들 수 있습니다
+    // 5_i32는 5i32와 동일합니다
     let boxed_i32 = Box::new(5_i32);
     let stacked_i32 = 6_i32;
 
-    // Borrow the contents of the box. Ownership is not taken,
-    // so the contents can be borrowed again.
+    // 박스의 내용을 참조합니다. 소유권이 취해지지 않으므로 내용은 다시 참조될 수 있습니다.
     borrow_i32(&boxed_i32);
     borrow_i32(&stacked_i32);
 
     {
-        // Take a reference to the data contained inside the box
+        // 박스 안에 있는 데이터에 대한 참조를 가져옵니다
         let _ref_to_i32: &i32 = &boxed_i32;
 
-        // Error!
-        // Can't destroy `boxed_i32` while the inner value is borrowed later in scope.
+        // 오류!
+        // 내부 값이 참조된 후에 `boxed_i32`를 파괴할 수 없습니다.
         eat_box_i32(boxed_i32);
-        // FIXME ^ Comment out this line
+        // FIXME ^ 이 줄을 주석 처리합니다
 
-        // Attempt to borrow `_ref_to_i32` after inner value is destroyed
+        // 내부 값이 파괴된 후 `_ref_to_i32`를 참조하려고 합니다
         borrow_i32(_ref_to_i32);
-        // `_ref_to_i32` goes out of scope and is no longer borrowed.
+        // `_ref_to_i32`는 범위를 벗어나 참조되지 않습니다.
     }
 
-    // `boxed_i32` can now give up ownership to `eat_box_i32` and be destroyed
+    // `boxed_i32`는 이제 `eat_box_i32`에 소유권을 양도하고 파괴될 수 있습니다
     eat_box_i32(boxed_i32);
 }
 ```

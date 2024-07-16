@@ -1,11 +1,9 @@
-# To and from Strings
+## 문자열 변환
 
-## Converting to String
+### 문자열로 변환하기
 
-To convert any type to a `String` is as simple as implementing the [`ToString`]
-trait for the type. Rather than doing so directly, you should implement the
-[`fmt::Display`][Display] trait which automagically provides [`ToString`] and
-also allows printing the type as discussed in the section on [`print!`][print].
+어떤 유형을 `String`으로 변환하는 것은 해당 유형에 대한 [`ToString`]
+trait를 구현하는 것만큼 간단합니다. 직접 구현하는 대신, [`fmt::Display`][Display] 트레이트를 구현하는 것이 좋습니다. 이 트레이트는 자동으로 [`ToString`]를 제공하며, [`print!`][print] 섹션에서 설명한 유형을 출력하는 데에도 사용됩니다.
 
 ```rust,editable
 use std::fmt;
@@ -26,18 +24,12 @@ fn main() {
 }
 ```
 
-## Parsing a String
+### 문자열 분석하기
 
-It's useful to convert strings into many types, but one of the more common string
-operations is to convert them from string to number. The idiomatic approach to
-this is to use the [`parse`] function and either to arrange for type inference or
-to specify the type to parse using the 'turbofish' syntax. Both alternatives are
-shown in the following example.
+문자열을 여러 유형으로 변환하는 것은 유용하지만, 문자열을 숫자로 변환하는 것은 흔한 작업 중 하나입니다. 이 작업을 수행하는 일반적인 방법은 [`parse`] 함수를 사용하는 것입니다. 유형 추론을 사용하거나 'turbofish' 구문을 사용하여 파싱할 유형을 명시할 수 있습니다. 두 가지 대안이 다음 예제에서 보여집니다.
 
-This will convert the string into the type specified as long as the [`FromStr`]
-trait is implemented for that type. This is implemented for numerous types
-within the standard library. To obtain this functionality on a user defined type
-simply implement the [`FromStr`] trait for that type.
+이 코드는 지정된 유형으로 문자열을 변환합니다. [`FromStr`]
+trait가 해당 유형에 대해 구현되어 있는 경우에만 가능합니다. 표준 라이브러리 내의 여러 유형에 대해 이 기능이 구현되어 있습니다. 사용자 정의 유형에 대해 이 기능을 사용하려면 해당 유형에 대한 [`FromStr`] 트레이트를 구현해야 합니다.
 
 ```rust,editable
 fn main() {

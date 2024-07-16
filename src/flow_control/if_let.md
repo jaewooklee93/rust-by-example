@@ -1,64 +1,60 @@
-# if let
+## if let
 
-For some use cases, when matching enums, `match` is awkward. For example:
+일부 사용 사례에서, `match`가 어색할 때 `if let`이 유용합니다. 예를 들어:
 
 ```rust
-// Make `optional` of type `Option<i32>`
+// `optional`을 `Option<i32>` 타입으로 만듭니다.
 let optional = Some(7);
 
 match optional {
     Some(i) => println!("This is a really long string and `{:?}`", i),
     _ => {},
-    // ^ Required because `match` is exhaustive. Doesn't it seem
-    // like wasted space?
+    // ^ `match`가 완전해야 하기 때문에 필요합니다. 낭비된 공간처럼 보이지 않나요?
 };
 
 ```
 
-`if let` is cleaner for this use case and in addition allows various
-failure options to be specified:
+`if let`는 이러한 사용 사례에 대해 깔끔하며, 여러 가지 실패 옵션을 지정할 수 있습니다.
 
 ```rust,editable
 fn main() {
-    // All have type `Option<i32>`
+    // 모두 `Option<i32>` 타입입니다.
     let number = Some(7);
     let letter: Option<i32> = None;
     let emoticon: Option<i32> = None;
 
-    // The `if let` construct reads: "if `let` destructures `number` into
-    // `Some(i)`, evaluate the block (`{}`).
+    // `if let` 구문은 "`let`이 `number`를 `Some(i)`로 해체하면 블록 (`{}`)을 평가한다"는 의미입니다.
     if let Some(i) = number {
         println!("Matched {:?}!", i);
     }
 
-    // If you need to specify a failure, use an else:
+    // 실패를 지정해야 한다면 `else`를 사용합니다.
     if let Some(i) = letter {
         println!("Matched {:?}!", i);
     } else {
-        // Destructure failed. Change to the failure case.
-        println!("Didn't match a number. Let's go with a letter!");
+        // 해체 실패. 실패 케이스로 변경합니다.
+        println!("숫자가 일치하지 않았습니다. 글자로 가겠습니다!");
     }
 
-    // Provide an altered failing condition.
+    // 다른 실패 조건을 제공합니다.
     let i_like_letters = false;
 
     if let Some(i) = emoticon {
         println!("Matched {:?}!", i);
-    // Destructure failed. Evaluate an `else if` condition to see if the
-    // alternate failure branch should be taken:
+    // 해체 실패. `else if` 조건을 평가하여 대체 실패 범위가 적용되어야 하는지 확인합니다:
     } else if i_like_letters {
-        println!("Didn't match a number. Let's go with a letter!");
+        println!("숫자가 일치하지 않았습니다. 글자로 가겠습니다!");
     } else {
-        // The condition evaluated false. This branch is the default:
-        println!("I don't like letters. Let's go with an emoticon :)!");
+        // 조건이 거짓으로 평가되었습니다. 이 범위는 기본입니다:
+        println!("글자를 좋아하지 않습니다. 이모티콘 :)으로 가겠습니다!");
     }
 }
 ```
 
-In the same way, `if let` can be used to match any enum value:
+마찬가지로 `if let`은 모든 `enum` 값을 일치시키는 데 사용할 수 있습니다.
 
 ```rust,editable
-// Our example enum
+// 우리의 예제 `enum`
 enum Foo {
     Bar,
     Baz,
@@ -66,59 +62,59 @@ enum Foo {
 }
 
 fn main() {
-    // Create example variables
+    // 예제 변수를 생성합니다
     let a = Foo::Bar;
     let b = Foo::Baz;
     let c = Foo::Qux(100);
     
-    // Variable a matches Foo::Bar
+    // 변수 `a`는 `Foo::Bar`와 일치합니다
     if let Foo::Bar = a {
         println!("a is foobar");
     }
     
-    // Variable b does not match Foo::Bar
-    // So this will print nothing
+    // 변수 `b`는 `Foo::Bar`와 일치하지 않습니다
+    // 따라서 아무것도 출력되지 않습니다
     if let Foo::Bar = b {
         println!("b is foobar");
     }
     
-    // Variable c matches Foo::Qux which has a value
-    // Similar to Some() in the previous example
+    // 변수 `c`는 `Foo::Qux`와 일치하며 값이 있습니다
+    // 이전 예제의 `Some()`와 유사합니다
     if let Foo::Qux(value) = c {
         println!("c is {}", value);
     }
 
-    // Binding also works with `if let`
+    // `if let`에서 바인딩도 작동합니다
     if let Foo::Qux(value @ 100) = c {
         println!("c is one hundred");
     }
 }
 ```
 
-Another benefit is that `if let` allows us to match non-parameterized enum variants. This is true even in cases where the enum doesn't implement or derive `PartialEq`. In such cases `if Foo::Bar == a` would fail to compile, because instances of the enum cannot be equated, however `if let` will continue to work.
+또 다른 장점은 `if let`이 비 매개변수화된 `enum` 변이를 일치시킬 수 있다는 것입니다. `enum`이 `PartialEq`를 구현하거나 파생하지 않더라도 이는 가능합니다. 이러한 경우 `if Foo::Bar == a`는 컴파일 오류를 발생시키기 때문에 `enum` 인스턴스를 비교할 수 없지만, `if let`은 계속 작동합니다.
 
-Would you like a challenge? Fix the following example to use `if let`:
+도전해 보시겠습니까? 다음 예제를 `if let`을 사용하여 수정해 보세요.
 
 ```rust,editable,ignore,mdbook-runnable
-// This enum purposely neither implements nor derives PartialEq.
-// That is why comparing Foo::Bar == a fails below.
+// 이 `enum`은 `PartialEq`를 구현하거나 파생하지 않습니다.
+// 그래서 `Foo::Bar == a`가 아래에서 오류를 발생시킵니다.
 enum Foo {Bar}
 
 fn main() {
     let a = Foo::Bar;
 
-    // Variable a matches Foo::Bar
+    // 변수 `a`는 `Foo::Bar`와 일치합니다
     if Foo::Bar == a {
-    // ^-- this causes a compile-time error. Use `if let` instead.
+    // ^-- 이 부분은 컴파일 오류를 발생시킵니다. `if let`을 사용하세요.
         println!("a is foobar");
     }
 }
 ```
 
-### See also:
+### 참조
 
 [`enum`][enum], [`Option`][option], and the [RFC][if_let_rfc]
 
 [enum]: ../custom_types/enum.md
 [if_let_rfc]: https://github.com/rust-lang/rfcs/pull/160
-[option]: ../std/option.md
+ [선택형]: ../std/option.md

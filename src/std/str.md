@@ -105,60 +105,59 @@ fn main() {
     let quotes = r#"And then I said: "There is no escape!""#;
     println!("{}", quotes);
 
-    // If you need "# in your string, just use more #s in the delimiter.
-    // You can use up to 255 #s.
-    let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+    // 문자열에 "#"이 필요하면, 구분자에 더 많은 "#"를 사용하세요.
+    // 최대 255개의 "#"를 사용할 수 있습니다.
+    let longer_delimiter = r###"문자열에 "#"이 있습니다. 심지어 "##"도 있습니다!"###;
     println!("{}", longer_delimiter);
 }
 ```
 
-Want a string that's not UTF-8? (Remember, `str` and `String` must be valid UTF-8).
-Or maybe you want an array of bytes that's mostly text? Byte strings to the rescue!
+UTF-8가 아닌 문자열이 필요하신가요? (기억하세요, `str`과 `String`은 유효한 UTF-8여야 합니다).
+혹시 주로 텍스트인 바이트 배열을 원하시나요? 바이트 문자열이 도움이 될 수 있습니다!
 
 ```rust, editable
 use std::str;
 
 fn main() {
-    // Note that this is not actually a `&str`
+    // 이것은 실제로 `&str`이 아닙니다.
     let bytestring: &[u8; 21] = b"this is a byte string";
 
-    // Byte arrays don't have the `Display` trait, so printing them is a bit limited
-    println!("A byte string: {:?}", bytestring);
+    // 바이트 배열은 `Display` 트레이트를 가지고 있지 않으므로 출력이 제한적입니다.
+    println!("바이트 문자열: {:?}", bytestring);
 
-    // Byte strings can have byte escapes...
+    // 바이트 문자열에는 바이트 이스케이프가 있을 수 있습니다...
     let escaped = b"\x52\x75\x73\x74 as bytes";
-    // ...but no unicode escapes
+    // ...하지만 유니코드 이스케이프는 없습니다
     // let escaped = b"\u{211D} is not allowed";
-    println!("Some escaped bytes: {:?}", escaped);
+    println!("일부 이스케이프된 바이트: {:?}", escaped);
 
 
-    // Raw byte strings work just like raw strings
+    // 生の바이트文字列は生の文字列と同じように動作します
     let raw_bytestring = br"\u{211D} is not escaped here";
     println!("{:?}", raw_bytestring);
 
-    // Converting a byte array to `str` can fail
+    // 바이트 배열을 `str`로 변환하는 것은 실패할 수 있습니다.
     if let Ok(my_str) = str::from_utf8(raw_bytestring) {
-        println!("And the same as text: '{}'", my_str);
+        println!("그리고 텍스트로 동일하게: '{}'", my_str);
     }
 
     let _quotes = br#"You can also use "fancier" formatting, \
                     like with normal raw strings"#;
 
-    // Byte strings don't have to be UTF-8
-    let shift_jis = b"\x82\xe6\x82\xa8\x82\xb1\x82\xbb"; // "ようこそ" in SHIFT-JIS
+    // 바이트 문자열은 UTF-8가 아니어도 됩니다.
+    let shift_jis = b"\x82\xe6\x82\xa8\x82\xb1\x82\xbb"; // SHIFT-JIS로 "ようこそ"
 
-    // But then they can't always be converted to `str`
+    // 그러나 항상 `str`로 변환될 수는 없습니다.
     match str::from_utf8(shift_jis) {
-        Ok(my_str) => println!("Conversion successful: '{}'", my_str),
-        Err(e) => println!("Conversion failed: {:?}", e),
+        Ok(my_str) => println!("변환 성공: '{}'", my_str),
+        Err(e) => println!("변환 실패: {:?}", e),
     };
 }
 ```
 
-For conversions between character encodings check out the [encoding][encoding-crate] crate.
+문자 인코딩 간 변환은 [encoding][encoding-crate] crate를 참조하세요.
 
-A more detailed listing of the ways to write string literals and escape characters
-is given in the ['Tokens' chapter][tokens] of the Rust Reference.
+문자열 리터럴을 작성하고 이스케이프 문자를 사용하는 방법에 대한 자세한 목록은 Rust 참조의 ['Tokens' 챕터][tokens]를 참조하세요.
 
 [str]: https://doc.rust-lang.org/std/str/
 [string]: https://doc.rust-lang.org/std/string/

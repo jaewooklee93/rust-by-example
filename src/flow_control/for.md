@@ -1,17 +1,16 @@
-# for loops
+## for 루프
 
-## for and range
+### for와 range
 
-The `for in` construct can be used to iterate through an `Iterator`.
-One of the easiest ways to create an iterator is to use the range
-notation `a..b`. This yields values from `a` (inclusive) to `b`
-(exclusive) in steps of one.
+`for in` 구문은 `Iterator`를 반복할 수 있도록 사용할 수 있습니다.
+가장 쉬운 방법 중 하나는 `range` 표현식 `a..b`를 사용하는 것입니다.
+이는 `a` (포함)부터 `b` (제외)까지 1씩 증가하는 값을 생성합니다.
 
-Let's write FizzBuzz using `for` instead of `while`.
+FizzBuzz를 `for`를 사용하여 `while` 대신 작성해 보겠습니다.
 
 ```rust,editable
 fn main() {
-    // `n` will take the values: 1, 2, ..., 100 in each iteration
+    // `n`은 각 반복에서 1, 2, ..., 100의 값을 가집니다.
     for n in 1..101 {
         if n % 15 == 0 {
             println!("fizzbuzz");
@@ -26,12 +25,12 @@ fn main() {
 }
 ```
 
-Alternatively, `a..=b` can be used for a range that is inclusive on both ends.
-The above can be written as:
+또는 `a..=b`를 사용하여 양쪽 끝이 모두 포함되는 범위를 사용할 수 있습니다.
+위 코드는 다음과 같이 작성할 수 있습니다.
 
 ```rust,editable
 fn main() {
-    // `n` will take the values: 1, 2, ..., 100 in each iteration
+    // `n`은 각 반복에서 1, 2, ..., 100의 값을 가집니다.
     for n in 1..=100 {
         if n % 15 == 0 {
             println!("fizzbuzz");
@@ -46,19 +45,16 @@ fn main() {
 }
 ```
 
-## for and iterators
+### for와 Iterator
 
-The `for in` construct is able to interact with an `Iterator` in several ways.
-As discussed in the section on the [Iterator][iter] trait, by default the `for`
-loop will apply the `into_iter` function to the collection. However, this is
-not the only means of converting collections into iterators.
+`for in` 구문은 `Iterator`와 다양한 방식으로 상호 작용할 수 있습니다.
+[Iterator][iter] 트레이트 섹션에서 설명했듯이, 기본적으로 `for` 루프는 `into_iter` 함수를 컬렉션에 적용합니다.
+그러나 컬렉션을 Iterator로 변환하는 방법은 이것뿐만이지 않습니다.
 
-`into_iter`, `iter` and `iter_mut` all handle the conversion of a collection
-into an iterator in different ways, by providing different views on the data
-within.
+`into_iter`, `iter` 및 `iter_mut`는 모두 데이터 내부에 대한 다른 뷰를 제공하여 컬렉션을 Iterator로 변환하는 데 다르게 처리합니다.
 
-* `iter` - This borrows each element of the collection through each iteration.
-  Thus leaving the collection untouched and available for reuse after the loop.
+* `iter` - 이 함수는 컬렉션의 각 요소를 각 반복에서 참조합니다.
+  따라서 루프 후 컬렉션이 손상되지 않고 재사용 가능합니다.
 
 ```rust,editable
 fn main() {
@@ -67,7 +63,7 @@ fn main() {
     for name in names.iter() {
         match name {
             &"Ferris" => println!("There is a rustacean among us!"),
-            // TODO ^ Try deleting the & and matching just "Ferris"
+            // TODO ^ &를 삭제하고 "Ferris"만 매칭해 보세요
             _ => println!("Hello {}", name),
         }
     }
@@ -76,9 +72,8 @@ fn main() {
 }
 ```
 
-* `into_iter` - This consumes the collection so that on each iteration the exact
-  data is provided. Once the collection has been consumed it is no longer
-  available for reuse as it has been 'moved' within the loop.
+* `into_iter` - 이 함수는 컬렉션을 소비하여 각 반복에서 정확한 데이터를 제공합니다.
+  컬렉션이 소비되면 각 반복에서 데이터가 이동되었기 때문에 루프 후 컬렉션은 재사용할 수 없습니다.
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
@@ -92,12 +87,11 @@ fn main() {
     }
     
     println!("names: {:?}", names);
-    // FIXME ^ Comment out this line
+    // FIXME ^ 이 줄을 주석 처리하세요
 }
 ```
 
-* `iter_mut` - This mutably borrows each element of the collection, allowing for
-  the collection to be modified in place.
+* `iter_mut` - 이 함수는 컬렉션의 각 요소에 대해 변형 가능한 참조를 제공하여 컬렉션을 변형할 수 있습니다.
 
 ```rust,editable
 fn main() {
@@ -114,11 +108,9 @@ fn main() {
 }
 ```
 
-In the above snippets note the type of `match` branch, that is the key
-difference in the types of iteration. The difference in type then of course
-implies differing actions that are able to be performed.
+위 코드에서 `match` 조건의 유형을 주의 깊게 살펴보세요. 이것은 반복 유형의 핵심 차이이며, 따라서 수행 가능한 작업이 다릅니다.
 
-### See also:
+### 참조:
 
 [Iterator][iter]
 

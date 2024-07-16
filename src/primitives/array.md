@@ -1,71 +1,62 @@
-# Arrays and Slices
+## 배열과 슬라이스
 
-An array is a collection of objects of the same type `T`, stored in contiguous
-memory. Arrays are created using brackets `[]`, and their length, which is known
-at compile time, is part of their type signature `[T; length]`.
+배열은 동일한 유형 `T`의 객체의 집합으로, 연속된 메모리에 저장됩니다. 배열은 `[]`를 사용하여 생성되며, 컴파일 시 알려진 길이는 유형 시그니처 `[T; length]`의 일부입니다.
 
-Slices are similar to arrays, but their length is not known at compile time.
-Instead, a slice is a two-word object; the first word is a pointer to the data,
-the second word is the length of the slice. The word size is the same as usize,
-determined by the processor architecture, e.g. 64 bits on an x86-64. Slices can
-be used to borrow a section of an array and have the type signature `&[T]`.
+슬라이스는 배열과 유사하지만 길이는 컴파일 시 알려지지 않습니다. 대신 슬라이스는 두 개의 단어로 구성된 객체입니다. 첫 번째 단어는 데이터 포인터이고, 두 번째 단어는 슬라이스의 길이입니다. 단어 크기는 프로세서 아키텍처에 따라 결정되는 `usize`와 동일하며, 예를 들어 x86-64에서 64비트입니다. 슬라이스는 배열의 섹션을 대여하여 `&[T]`의 유형 시그니처를 사용할 수 있습니다.
 
 ```rust,editable,ignore,mdbook-runnable
 use std::mem;
 
-// This function borrows a slice.
+// 이 함수는 슬라이스를 대여합니다.
 fn analyze_slice(slice: &[i32]) {
-    println!("First element of the slice: {}", slice[0]);
-    println!("The slice has {} elements", slice.len());
+    println!("Slice의 첫 번째 요소: {}", slice[0]);
+    println!("슬라이스에는 {} 개의 요소가 있습니다", slice.len());
 }
 
 fn main() {
-    // Fixed-size array (type signature is superfluous).
+    // 고정 크기 배열 (유형 시그니처는 불필요합니다).
     let xs: [i32; 5] = [1, 2, 3, 4, 5];
 
-    // All elements can be initialized to the same value.
+    // 모든 요소를 동일한 값으로 초기화할 수 있습니다.
     let ys: [i32; 500] = [0; 500];
 
-    // Indexing starts at 0.
-    println!("First element of the array: {}", xs[0]);
-    println!("Second element of the array: {}", xs[1]);
+    // 인덱싱은 0에서 시작합니다.
+    println!("배열의 첫 번째 요소: {}", xs[0]);
+    println!("배열의 두 번째 요소: {}", xs[1]);
 
-    // `len` returns the count of elements in the array.
-    println!("Number of elements in array: {}", xs.len());
+    // `len`은 배열의 요소 개수를 반환합니다.
+    println!("배열의 요소 수: {}", xs.len());
 
-    // Arrays are stack allocated.
-    println!("Array occupies {} bytes", mem::size_of_val(&xs));
+    // 배열은 스택에 할당됩니다.
+    println!("배열이 차지하는 바이트 수: {}", mem::size_of_val(&xs));
 
-    // Arrays can be automatically borrowed as slices.
-    println!("Borrow the whole array as a slice.");
+    // 배열은 자동으로 슬라이스로 대여될 수 있습니다.
+    println!("전체 배열을 슬라이스로 대여합니다.");
     analyze_slice(&xs);
 
-    // Slices can point to a section of an array.
-    // They are of the form [starting_index..ending_index].
-    // `starting_index` is the first position in the slice.
-    // `ending_index` is one more than the last position in the slice.
-    println!("Borrow a section of the array as a slice.");
+    // 슬라이스는 배열의 섹션을 가리킬 수 있습니다.
+    // 그들은 `[시작 인덱스..끝 인덱스]` 형식입니다.
+    // `시작 인덱스`는 슬라이스의 첫 번째 위치입니다.
+    // `끝 인덱스`는 슬라이스의 마지막 위치보다 하나 더 큽니다.
+    println!("배열의 섹션을 슬라이스로 대여합니다.");
     analyze_slice(&ys[1 .. 4]);
 
-    // Example of empty slice `&[]`:
+    // 빈 슬라이스 `&[]`의 예:
     let empty_array: [u32; 0] = [];
     assert_eq!(&empty_array, &[]);
-    assert_eq!(&empty_array, &[][..]); // Same but more verbose
+    assert_eq!(&empty_array, &[][..]); // 같은 내용이지만 더 상세합니다
 
-    // Arrays can be safely accessed using `.get`, which returns an
-    // `Option`. This can be matched as shown below, or used with
-    // `.expect()` if you would like the program to exit with a nice
-    // message instead of happily continue.
-    for i in 0..xs.len() + 1 { // Oops, one element too far!
+    // 배열은 `.get`을 사용하여 안전하게 액세스할 수 있으며, `Option`을 반환합니다. 이를 아래와 같이 매치하거나, 프로그램이 예상치 못한 결과를 반환하는 대신 멋진 메시지로 종료하도록 `expect()`를 사용할 수 있습니다.
+    for i in 0..xs.len() + 1 { // 앗, 하나의 요소가 너무 많아!
         match xs.get(i) {
             Some(xval) => println!("{}: {}", i, xval),
-            None => println!("Slow down! {} is too far!", i),
+            None => println!("조심하세요! {}은 너무 멀어요!", i),
         }
     }
 
-    // Out of bound indexing on array causes compile time error.
+    // 배열에서 범위를 벗어난 인덱싱은 컴파일 시 오류를 발생시킵니다.
     //println!("{}", xs[5]);
-    // Out of bound indexing on slice causes runtime error.
+    // 슬라이스에서 범위를 벗어난 인덱싱은 실행 시 오류를 발생시킵니다.
     //println!("{}", xs[..][5]);
 }
 ```

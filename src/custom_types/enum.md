@@ -1,35 +1,31 @@
-# Enums
+## 열거형
 
-The `enum` keyword allows the creation of a type which may be one of a few
-different variants. Any variant which is valid as a `struct` is also valid in
-an `enum`.
+`enum` 키워드를 사용하면 몇 가지 다른 변형 중 하나일 수 있는 유형을 만들 수 있습니다.
+`struct`로 유효한 모든 변형은 `enum`에서도 유효합니다.
 
 ```rust,editable
-// Create an `enum` to classify a web event. Note how both
-// names and type information together specify the variant:
-// `PageLoad != PageUnload` and `KeyPress(char) != Paste(String)`.
-// Each is different and independent.
+// 웹 이벤트를 분류하는 `enum`을 만듭니다. `PageLoad != PageUnload`와 `KeyPress(char) != Paste(String)`와 같이 이름과 유형 정보가 함께 사용되어 변형을 명확히 구분합니다.
+// 각 변형은 서로 독립적입니다.
 enum WebEvent {
-    // An `enum` variant may either be `unit-like`,
+    // `enum` 변형은 `unit-like`,
     PageLoad,
     PageUnload,
-    // like tuple structs,
+    // tuple struct와 같이,
     KeyPress(char),
     Paste(String),
-    // or c-like structures.
+    // 또는 C 스타일 구조와 같이 할 수 있습니다.
     Click { x: i64, y: i64 },
 }
 
-// A function which takes a `WebEvent` enum as an argument and
-// returns nothing.
+// `WebEvent` 열거형을 인자로 받고 아무것도 반환하지 않는 함수입니다.
 fn inspect(event: WebEvent) {
     match event {
         WebEvent::PageLoad => println!("page loaded"),
         WebEvent::PageUnload => println!("page unloaded"),
-        // Destructure `c` from inside the `enum` variant.
+        // `c`를 `enum` 변형 내부에서 해체합니다.
         WebEvent::KeyPress(c) => println!("pressed '{}'.", c),
         WebEvent::Paste(s) => println!("pasted \"{}\".", s),
-        // Destructure `Click` into `x` and `y`.
+        // `Click`를 `x`와 `y`로 해체합니다.
         WebEvent::Click { x, y } => {
             println!("clicked at x={}, y={}.", x, y);
         },
@@ -38,7 +34,7 @@ fn inspect(event: WebEvent) {
 
 fn main() {
     let pressed = WebEvent::KeyPress('x');
-    // `to_owned()` creates an owned `String` from a string slice.
+    // `to_owned()`은 문자열 슬라이스에서 소유된 `String`을 만듭니다.
     let pasted  = WebEvent::Paste("my text".to_owned());
     let click   = WebEvent::Click { x: 20, y: 80 };
     let load    = WebEvent::PageLoad;
@@ -53,11 +49,9 @@ fn main() {
 
 ```
 
-## Type aliases
+## 유형 별칭
 
-If you use a type alias, you can refer to each enum variant via its alias.
-This might be useful if the enum's name is too long or too generic, and you
-want to rename it.
+유형 별칭을 사용하면 각 열거형 변형을 별칭을 통해 참조할 수 있습니다. 이는 열거형의 이름이 너무 길거나 너무 일반적이고, 이름을 바꾸고 싶을 때 유용합니다.
 
 ```rust,editable
 enum VeryVerboseEnumOfThingsToDoWithNumbers {
@@ -65,17 +59,16 @@ enum VeryVerboseEnumOfThingsToDoWithNumbers {
     Subtract,
 }
 
-// Creates a type alias
+// 유형 별칭을 만듭니다.
 type Operations = VeryVerboseEnumOfThingsToDoWithNumbers;
 
 fn main() {
-    // We can refer to each variant via its alias, not its long and inconvenient
-    // name.
+    // 각 변형을 별칭을 통해 참조할 수 있습니다.
     let x = Operations::Add;
 }
 ```
 
-The most common place you'll see this is in `impl` blocks using the `Self` alias.
+가장 일반적으로 볼 수 있는 곳은 `impl` 블록에서 `Self` 별칭을 사용하는 것입니다.
 
 ```rust,editable
 enum VeryVerboseEnumOfThingsToDoWithNumbers {
@@ -93,11 +86,9 @@ impl VeryVerboseEnumOfThingsToDoWithNumbers {
 }
 ```
 
-To learn more about enums and type aliases, you can read the
-[stabilization report][aliasreport] from when this feature was stabilized into
-Rust.
+열거형과 유형 별칭에 대해 더 자세히 알고 싶으시면 [stabilization report][aliasreport]를 참조하십시오. 이 보고서는 이 기능이 Rust로 안정화되었을 때 작성되었습니다.
 
-### See also:
+### 참조
 
 [`match`][match], [`fn`][fn], and [`String`][str], ["Type alias enum variants" RFC][type_alias_rfc]
 

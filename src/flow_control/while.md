@@ -1,15 +1,15 @@
-# while
+## while
 
-The `while` keyword can be used to run a loop while a condition is true.
+`while` 키워드는 조건이 참일 때 반복문을 실행하는 데 사용할 수 있습니다.
 
-Let's write the infamous [FizzBuzz][fizzbuzz] using a `while` loop.
+[FizzBuzz][fizzbuzz]를 `while` 루프를 사용하여 작성해 보겠습니다.
 
 ```rust,editable
 fn main() {
-    // A counter variable
+    // 카운터 변수
     let mut n = 1;
 
-    // Loop while `n` is less than 101
+    // `n`이 101보다 작을 때까지 루프
     while n < 101 {
         if n % 15 == 0 {
             println!("fizzbuzz");
@@ -21,10 +21,10 @@ fn main() {
             println!("{}", n);
         }
 
-        // Increment counter
+        // 카운터 증가
         n += 1;
     }
 }
 ```
 
-[fizzbuzz]: https://en.wikipedia.org/wiki/Fizz_buzz
+[fizzbuzz]: https://ko.wikipedia.org/wiki/FizzBuzz

@@ -1,32 +1,23 @@
-# Other uses of `?`
+## `?`의 다른 사용법
 
-Notice in the previous example that our immediate reaction to calling
-`parse` is to `map` the error from a library error into a boxed
-error:
+이전 예제에서 `parse`를 호출할 때 우리의 즉각적인 반응은 라이브러리 오류에서 오류를 `map`하는 것입니다.
 
 ```rust,ignore
 .and_then(|s| s.parse::<i32>())
     .map_err(|e| e.into())
 ```
 
-Since this is a simple and common operation, it would be convenient if it
-could be elided. Alas, because `and_then` is not sufficiently flexible, it
-cannot. However, we can instead use `?`.
+이것은 간단하고 흔한 작업이기 때문에 생략될 수 있을 것입니다. 하지만 `and_then`이 충분히 유연하지 않기 때문에 불가능합니다. 그러나 대신 `?`를 사용할 수 있습니다.
 
-`?` was previously explained as either `unwrap` or `return Err(err)`.
-This is only mostly true. It actually means `unwrap` or
-`return Err(From::from(err))`. Since `From::from` is a conversion utility
-between different types, this means that if you `?` where the error is
-convertible to the return type, it will convert automatically.
+`?`는 이전에 `unwrap` 또는 `return Err(err)`로 설명되었습니다. 이것은 거의 사실입니다. 실제로는 `unwrap` 또는 `return Err(From::from(err))`를 의미합니다. `From::from`가 다른 유형 간의 변환 유틸리티이기 때문에, `?`에서 오류가 반환 유형으로 변환 가능하면 자동으로 변환됩니다.
 
-Here, we rewrite the previous example using `?`. As a result, the
-`map_err` will go away when `From::from` is implemented for our error type:
+여기서 `?`를 사용하여 이전 예제를 다시 작성합니다. 결과적으로 `From::from`가 우리의 오류 유형에 대해 구현되면 `map_err`가 사라집니다.
 
 ```rust,editable
 use std::error;
 use std::fmt;
 
-// Change the alias to use `Box<dyn error::Error>`.
+// alias를 `Box<dyn error::Error>`를 사용하도록 변경합니다.
 type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 #[derive(Debug)]
@@ -40,8 +31,7 @@ impl fmt::Display for EmptyVec {
 
 impl error::Error for EmptyVec {}
 
-// The same structure as before but rather than chain all `Results`
-// and `Options` along, we `?` to get the inner value out immediately.
+// 이전과 같은 구조이지만 `Results`와 `Options`을 모두 연결하는 대신 `?`를 사용하여 즉시 내부 값을 가져옵니다.
 fn double_first(vec: Vec<&str>) -> Result<i32> {
     let first = vec.first().ok_or(EmptyVec)?;
     let parsed = first.parse::<i32>()?;
@@ -66,12 +56,9 @@ fn main() {
 }
 ```
 
-This is actually fairly clean now. Compared with the original `panic`, it
-is very similar to replacing the `unwrap` calls with `?` except that the
-return types are `Result`. As a result, they must be destructured at the
-top level.
+이것은 지금은 매우 깔끔합니다. 원래 `panic`와 비교했을 때, `unwrap` 호출을 `?`로 대체하는 것과 유사하지만 반환 유형이 `Result`이기 때문에 최상위에서 해체되어야 합니다.
 
-### See also:
+### 참조
 
 [`From::from`][from] and [`?`][q_mark]
 

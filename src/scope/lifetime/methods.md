@@ -1,12 +1,12 @@
-# Methods
+## 메서드
 
-Methods are annotated similarly to functions:
+메서드는 함수와 유사하게 나타냅니다.
 
 ```rust,editable
 struct Owner(i32);
 
 impl Owner {
-    // Annotate lifetimes as in a standalone function.
+    // 라이프타임을 함수와 같이 나타냅니다.
     fn add_one<'a>(&'a mut self) { self.0 += 1; }
     fn print<'a>(&'a self) {
         println!("`print`: {}", self.0);
@@ -21,8 +21,8 @@ fn main() {
 }
 ```
 
-### See also:
+### 참조:
 
-[methods]
+[메서드]
 
-[methods]: ../../fn/methods.md
+[메서드]: ../../fn/methods.md

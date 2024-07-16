@@ -1,34 +1,30 @@
-# Expressions
+## 표현식
 
-A Rust program is (mostly) made up of a series of statements:
+Rust 프로그램은 (주로) 다음과 같은 명령문의 일련으로 구성됩니다.
 
 ```rust,editable
 fn main() {
-    // statement
-    // statement
-    // statement
+    // 명령문
+    // 명령문
+    // 명령문
 }
 ```
 
-There are a few kinds of statements in Rust. The most common two are declaring
-a variable binding, and using a `;` with an expression:
+Rust에는 몇 가지 유형의 명령문이 있습니다. 가장 일반적인 두 가지는 변수 바인딩을 선언하고 `;`와 함께 표현식을 사용하는 것입니다.
 
 ```rust,editable
 fn main() {
-    // variable binding
+    // 변수 바인딩
     let x = 5;
 
-    // expression;
+    // 표현식;
     x;
     x + 1;
     15;
 }
 ```
 
-Blocks are expressions too, so they can be used as values in
-assignments. The last expression in the block will be assigned to the
-place expression such as a local variable. However, if the last expression of the block ends with a
-semicolon, the return value will be `()`.
+블록 또한 표현식이므로 할당에 값으로 사용될 수 있습니다. 블록의 마지막 표현식이 할당되는 위치 표현식(예: 지역 변수)에 할당됩니다. 그러나 블록의 마지막 표현식이 세미콜론으로 끝나면 반환 값이 `()`이 됩니다.
 
 ```rust,editable
 fn main() {
@@ -38,12 +34,12 @@ fn main() {
         let x_squared = x * x;
         let x_cube = x_squared * x;
 
-        // This expression will be assigned to `y`
+        // 이 표현식이 `y`에 할당됩니다
         x_cube + x_squared + x
     };
 
     let z = {
-        // The semicolon suppresses this expression and `()` is assigned to `z`
+        // 세미콜론이 표현식을 무시하고 `()`가 `z`에 할당됩니다
         2 * x;
     };
 
